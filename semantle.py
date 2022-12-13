@@ -22,7 +22,7 @@ FIRST_DAY = date(2022, 4, 1)
 scheduler = BackgroundScheduler()
 scheduler.start()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="/app/frontend/dist")
 print("loading valid nearest")
 with open('data/valid_nearest.dat', 'rb') as f:
     valid_nearest_words, valid_nearest_vecs = pickle.load(f)
@@ -60,12 +60,12 @@ def get_index():
 
 @app.route("/favicon.ico")
 def send_favicon():
-    return send_file("static/assets/favicon.ico")
+    return send_file("frontend/dist/favicon.ico")
 
 
 @app.route("/assets/<path:path>")
 def send_static(path):
-    return send_from_directory("static/assets", path)
+    return send_from_directory("frontend/dist/assets", path)
 
 
 @app.route('/guess/<int:day>/<string:word>')
