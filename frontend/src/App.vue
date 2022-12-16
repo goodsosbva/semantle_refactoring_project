@@ -61,6 +61,7 @@ let conti_ans_number: number = 0;
 let giveup_number = ref<number>(0);
 const today_chel_number: number = 0;
 const is_give_up = ref<boolean>(false);
+const first_play = ref<number>(-1);
 
 let game_clear: string = "-1";
 
@@ -199,6 +200,7 @@ async function guessHandler(word: string) {
   } else {
     const result = submit_word as GuessResultInterface;
 
+    error_text.value = "";
     // 중복 체크
     // guess_data : 체크해야할 데이터들 목록
     if (duplicateChk(guess_data.value, result.guess)) {
@@ -413,12 +415,19 @@ onMounted(async () => {
           <td>{{ last_word[0] }}</td>
           <td id="heighlight">{{ last_word[1] }}</td>
           <td>{{ last_word[2] }}</td>
-          <td v-if="last_word[3] !== '1000위 이상' && last_word_toggle === 1">
+          <td
+            v-if="
+              last_word[3] !== '1000위 이상' &&
+              last_word_toggle === 1 &&
+              last_word[3] !== '정답!'
+            "
+          >
             <BarGraphVue
               v-if="last_word_toggle === 1"
               :value="last_word[3]"
             ></BarGraphVue>
           </td>
+          <td v-if="last_word[3] === '정답!'">{{ last_word[3] }}</td>
           <td v-if="last_word[3] === '1000위 이상'">{{ last_word[3] }}</td>
         </tr>
         <!-- 밑 줄 -->
@@ -434,9 +443,10 @@ onMounted(async () => {
           <td>{{ word.cnt }}</td>
           <td>{{ word.word }}</td>
           <td>{{ word.similarity }}</td>
-          <td v-if="word.rank !== '1000위 이상'">
+          <td v-if="word.rank !== '1000위 이상' && word.rank !== '정답!'">
             <BarGraphVue :value="word.rank"></BarGraphVue>
           </td>
+          <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
           <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
         </tr>
         <!-- 막 안들어온 경우 -->
@@ -448,9 +458,10 @@ onMounted(async () => {
           <td>{{ word.cnt }}</td>
           <td>{{ word.word }}</td>
           <td>{{ word.similarity }}</td>
-          <td v-if="word.rank !== '1000위 이상'">
+          <td v-if="word.rank !== '1000위 이상' && word.rank !== '정답!'">
             <BarGraphVue :value="word.rank"></BarGraphVue>
           </td>
+          <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
           <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
         </tr>
       </tbody>
