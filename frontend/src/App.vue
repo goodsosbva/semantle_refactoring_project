@@ -339,10 +339,26 @@ async function giveUp() {
         cnt: idx,
         word: "[정답 단어가 들어가야 함]", // Q. 이상함 (정답을 줘야 하는데 html dom 트리를 줌..)
         similarity: 100,
-        rank: 1,
+        rank: "정답",
       };
 
+      // 최신 단어 따로 표기
+      last_word = [idx, "[정답 단어가 들어가야 함]", 100, "정답"];
+
       guess_data.value.push(tmp);
+
+      // 로컬 추측 목록에 포기 답안 넣기
+      const guesses = storage.getItem("guesses");
+
+      // if - 시도도 안하고 포기 했을 때
+      if (guesses === null) {
+        const str_tmp = JSON.stringify([tmp]);
+        storage.setItem("guesses", str_tmp);
+      } else {
+        const obj_guesses = JSON.parse(guesses as string);
+        obj_guesses.push(tmp);
+        storage.setItem("guesses", JSON.stringify(obj_guesses));
+      }
 
       const stats = storage.getItem("stats");
       const stats_obj = JSON.parse(stats as string); //
@@ -434,7 +450,8 @@ onMounted(async () => {
             v-if="
               last_word[3] !== '1000위 이상' &&
               last_word_toggle === 1 &&
-              last_word[3] !== '정답!'
+              last_word[3] !== '정답!' &&
+              last_word[3] !== '정답'
             "
           >
             <BarGraphVue
@@ -444,6 +461,7 @@ onMounted(async () => {
           </td>
           <td v-if="last_word[3] === '정답!'">{{ last_word[3] }}</td>
           <td v-if="last_word[3] === '1000위 이상'">{{ last_word[3] }}</td>
+          <td v-if="last_word[3] === '정답'">{{ last_word[3] }}</td>
         </tr>
         <!-- 밑 줄 -->
         <tr>
@@ -458,11 +476,18 @@ onMounted(async () => {
           <td>{{ word.cnt }}</td>
           <td>{{ word.word }}</td>
           <td>{{ word.similarity }}</td>
-          <td v-if="word.rank !== '1000위 이상' && word.rank !== '정답!'">
+          <td
+            v-if="
+              word.rank !== '1000위 이상' &&
+              word.rank !== '정답!' &&
+              word.rank !== '정답'
+            "
+          >
             <BarGraphVue :value="word.rank"></BarGraphVue>
           </td>
           <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
           <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
+          <td v-if="word.rank === '정답'">{{ word.rank }}</td>
         </tr>
         <!-- 막 안들어온 경우 -->
         <tr
@@ -473,11 +498,18 @@ onMounted(async () => {
           <td>{{ word.cnt }}</td>
           <td>{{ word.word }}</td>
           <td>{{ word.similarity }}</td>
-          <td v-if="word.rank !== '1000위 이상' && word.rank !== '정답!'">
+          <td
+            v-if="
+              word.rank !== '1000위 이상' &&
+              word.rank !== '정답!' &&
+              word.rank !== '정답'
+            "
+          >
             <BarGraphVue :value="word.rank"></BarGraphVue>
           </td>
           <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
           <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
+          <td v-if="word.rank === '정답'">{{ word.rank }}</td>
         </tr>
       </tbody>
     </table>
