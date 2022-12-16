@@ -55,10 +55,10 @@ let answering_top_row = ref<any>(true);
 let result_dashboard = ref<any>(false);
 
 // 결과창 대쉬 보드 관련
-const chal_number = ref<number>(0); // 이제까지 도전한 횐수
-let ans_number = ref<number>(0); // 정답을 맞춘 총 횟수
+let chal_number: number = 1; // 이제까지 도전한 횐수
+let ans_number: number = 0; // 정답을 맞춘 총 횟수
 let conti_ans_number: number = 0;
-let giveup_number = ref<number>(0);
+let giveup_number: number = 0;
 const today_chel_number: number = 0;
 const is_give_up = ref<boolean>(false);
 const first_play = ref<number>(-1);
@@ -112,21 +112,21 @@ function getStats() {
   if (oldStats == null) {
     const stats = {
       puzzle_number: puzzle_number,
-      chal_number: chal_number.value, // 도전한 게임 횟수
-      ans_number: ans_number.value,
+      chal_number: chal_number, // 도전한 게임 횟수
+      ans_number: ans_number,
       conti_ans_number: conti_ans_number,
-      giveup_number: giveup_number.value,
+      giveup_number: giveup_number,
       today_chel_number: today_chel_number,
     };
     storage.setItem("stats", JSON.stringify(stats));
 
-    // 도전 횟수 증가용 (처음 +1)
-    const chk_stats_chel = storage.getItem("stats");
-    const chk_stats_chel_obj = JSON.parse(chk_stats_chel as string);
-    chk_stats_chel_obj["chal_number"]++;
-    chal_number.value = chk_stats_chel_obj["chal_number"];
-    console.log(chk_stats_chel_obj);
-    storage.setItem("stats", JSON.stringify(chk_stats_chel_obj));
+    // 도전 횟수 증가용 (처음 +1) Q. 이게 있어야 맞느거 같은데 없어야 맞음 왜지?
+    // const chk_stats_chel = storage.getItem("stats");
+    // const chk_stats_chel_obj = JSON.parse(chk_stats_chel as string);
+    // chk_stats_chel_obj["chal_number"]++;
+    // chal_number = chk_stats_chel_obj["chal_number"];
+    // console.log(chk_stats_chel_obj);
+    // storage.setItem("stats", JSON.stringify(chk_stats_chel_obj));
 
     return stats;
   } else {
@@ -152,7 +152,7 @@ function getStats() {
       const chk_stats_chel = storage.getItem("stats");
       const chk_stats_chel_obj = JSON.parse(chk_stats_chel as string);
       chk_stats_chel_obj["chal_number"]++;
-      chal_number.value = chk_stats_chel_obj["chal_number"];
+      chal_number = chk_stats_chel_obj["chal_number"];
       console.log(chk_stats_chel_obj);
       storage.setItem("stats", JSON.stringify(chk_stats_chel_obj));
     } else {
@@ -236,6 +236,8 @@ async function guessHandler(word: string) {
 
     // 정답이면?
     if (tmp.similarity === "100.00" && game_clear === "-1") {
+      // 포기 버튼 사라지게
+      game_over_dashboard = "false";
       result_dashboard = true;
       game_clear = "1";
       // 클리어 기록
@@ -245,9 +247,13 @@ async function guessHandler(word: string) {
       const old_stats = storage.getItem("stats");
       const stats = JSON.parse(old_stats as string); //
       stats["ans_number"]++;
-      stats["chal_number"]++;
+      // stats["chal_number"]++;
       stats["conti_ans_number"]++;
-      ans_number.value = stats["ans_number"];
+      ans_number++;
+      // chal_number++;
+      conti_ans_number++;
+
+      ans_number = stats["ans_number"];
       const new_stats = JSON.stringify(stats);
       storage.setItem("stats", new_stats);
     }
@@ -307,6 +313,15 @@ async function loadBasicInfo() {
   if (chk_give_up === "true") {
     game_over_dashboard = "true";
   }
+
+  // 결과창 새로고침해도 안사라지게
+  const str_stats = storage.getItem("stats");
+  const obj_stats = JSON.parse(str_stats as string);
+  console.log(obj_stats);
+  chal_number = obj_stats["chal_number"]; // 이제까지 도전한 횐수
+  ans_number = obj_stats["ans_number"]; // 정답을 맞춘 총 횟수
+  conti_ans_number = obj_stats["conti_ans_number"];
+  giveup_number = obj_stats["giveup_number"];
 }
 
 // 포기하기
@@ -337,10 +352,10 @@ async function giveUp() {
       // [o]. 포기 했으니 포기 카운트 1올리고,
       // [o]. 연속 정답 횟수 0으로 만들고,
       stats_obj["giveup_number"]++;
-      stats_obj["chal_number"]++;
+      // stats_obj["chal_number"]++;
       stats_obj["conti_ans_number"] = 0;
 
-      giveup_number.value = stats_obj["giveup_number"];
+      giveup_number = stats_obj["giveup_number"];
       conti_ans_number = stats_obj["conti_ans_number"];
       const stats_str = JSON.stringify(stats_obj);
       storage.setItem("stats", stats_str);

@@ -53,11 +53,11 @@ import { createApp } from "vue";
 
 const props = defineProps<{
   puzzle_number: number;
-  chal_number: number; // 도전한 게임 횟수
-  ans_number: number; // 정답 횟수
-  conti_ans_number: number; // 연속 성공 넘버
-  giveup_number: number; // 포기했을 때 넘버
-  today_chal_number: number; // 전체 돋전 횟수?
+  chal_number: any; // 도전한 게임 횟수
+  ans_number: any; // 정답 횟수
+  conti_ans_number: any; // 연속 성공 넘버
+  giveup_number: any; // 포기했을 때 넘버
+  today_chal_number: any; // 전체 돋전 횟수?
 }>();
 
 // 클립보드 복사
