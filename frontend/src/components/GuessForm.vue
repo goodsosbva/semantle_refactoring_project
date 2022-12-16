@@ -23,7 +23,7 @@
           value="추측하기"
           id="guess-btn"
           class="button"
-          @click="emit('guess', input_word)"
+          @click="clicked_input()"
         />
       </div>
     </div>
@@ -31,11 +31,20 @@
 </template>
 
 <script setup lang="ts">
+// @click="emit('guess', input_word)"
 import { ref } from "vue";
 
 const emit = defineEmits<{
-  (e: "guess", word: string): void;
+  (e: "guess1", word: string): void;
+  // (e: "guess2", is_clear: boolean): boolean;
 }>();
 
 const input_word = ref<string>("");
+
+function clicked_input() {
+  console.log("clicked_input!");
+  emit("guess1", input_word.value);
+  // emit("guess2", true);
+  input_word.value = "";
+}
 </script>
