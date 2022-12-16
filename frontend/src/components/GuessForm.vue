@@ -17,6 +17,7 @@
           id="guess"
           :value="input_word"
           @input="event => input_word = (event.target as HTMLInputElement).value"
+          v-on:keyup.enter="clicked_input()"
         />
         <input
           type="button"
