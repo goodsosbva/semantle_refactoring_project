@@ -72,8 +72,8 @@ function clipCopy() {
 }
 </script>
 
-<style>
-.clip {
+<style scoped>
+#clip {
   padding: 9px;
   margin-bottom: -15px;
 }

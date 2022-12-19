@@ -19,3 +19,12 @@ export interface GuessErrorInterface {
 export interface GuessCacheInterface {
   [key: string]: GuessResultInterface;
 }
+
+export type SortTargetInterface = "number" | "word" | "similarity";
+
+export interface GuessItemInterface {
+  cnt: number;
+  word: string;
+  similarity: number;
+  rank: string;
+}

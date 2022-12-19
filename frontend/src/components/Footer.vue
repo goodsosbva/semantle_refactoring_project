@@ -3,8 +3,8 @@
     <hr />
     <h3 id="faq">질문과 답변</h3>
 
-    <Toggle></Toggle>
-    <p><b>Q. 꼬맨틀은 무엇인가요?</b></p>
+    <Toggle :answer="q1" :question="a1"></Toggle>
+    <!-- <p><b>Q. 꼬맨틀은 무엇인가요?</b></p>
     <p>A.</p>
     <ul>
       <li>
@@ -12,7 +12,7 @@
         단어가 정답 단어와 얼마나 유사한지 유사도 점수로 알려줍니다. 가장 유사한
         단어의 유사도와 가까운 단어를 추측하면서, 정답 단어를 맞춰보세요.
       </li>
-    </ul>
+    </ul> -->
 
     <p><b>Q. 정답 단어에는 어떤 단어가 포함되어 있나요?</b></p>
     <p>A.</p>
@@ -206,6 +206,7 @@ const props = defineProps<{
   yesterday_keyword: string;
 }>();
 
-const puzzle_number = props.puzzle_number;
-console.log(puzzle_number);
+const q1 = "Q. 꼬맨틀은 무엇인가요?";
+const a1 =
+  "꼬맨틀은 오늘의 단어를 맞추는 게임입니다. 정답 단어를 추측하면, 추측한단어가 정답 단어와 얼마나 유사한지 유사도 점수로 알려줍니다. 가장 유사한단어의 유사도와 가까운 단어를 추측하면서, 정답 단어를 맞춰보세요.";
 </script>

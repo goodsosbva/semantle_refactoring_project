@@ -15,10 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { barCaculate } from "@/functions/barCaculate";
+import { computed } from "vue";
 const props = defineProps<{
   value: number;
 }>();
 
-const caculated_value = barCaculate(props.value);
+const caculated_value = computed(() => {
+  return (1001 - props.value) / 10;
+});
 </script>
