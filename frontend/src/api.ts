@@ -42,3 +42,15 @@ export async function submitGuess(
     return null;
   }
 }
+
+// 어제 정답 + 유사도 목록들
+// /nearest1k-data/<int:day>
+export async function nearest1k_data(puzzle_number: number): Promise<any> {
+  const url = "/nearest1k-data/" + puzzle_number;
+  const response = await fetch(url);
+  try {
+    return await response.json();
+  } catch (e) {
+    return null;
+  }
+}

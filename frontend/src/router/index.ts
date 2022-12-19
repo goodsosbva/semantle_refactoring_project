@@ -12,6 +12,8 @@ const routes = [
     path: "/nearest1k",
     name: "nearest1k",
     component: Words,
+    // 바꾼곳
+    props: true,
   },
 ];
 

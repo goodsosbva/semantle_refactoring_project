@@ -3,6 +3,7 @@
     <hr />
     <h3 id="faq">질문과 답변</h3>
 
+    <Toggle></Toggle>
     <p><b>Q. 꼬맨틀은 무엇인가요?</b></p>
     <p>A.</p>
     <ul>
@@ -198,8 +199,13 @@
 </template>
 
 <script setup lang="ts">
+import Toggle from "./Toggle.vue";
+
 const props = defineProps<{
   puzzle_number: number;
   yesterday_keyword: string;
 }>();
+
+const puzzle_number = props.puzzle_number;
+console.log(puzzle_number);
 </script>
