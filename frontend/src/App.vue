@@ -51,7 +51,7 @@ const guess_data = ref<any>([]);
 let last_word: any = [];
 let last_word_toggle: number = -1;
 
-let answering_top_row = ref<any>(true);
+let answering_top_row = ref<any>(false);
 let result_dashboard = ref<any>(false);
 
 // 결과창 대쉬 보드 관련
@@ -67,6 +67,13 @@ let game_clear: string = "-1";
 
 // 정렬 관련 toggle용
 const sort_toggle = ref<any>([1, 1, 1]);
+
+// 첫날
+const first_day: string | null = storage.getItem("firstday");
+// const first_day: string | null = "127";
+
+// 옵션 관련
+let option_toggle: any = false;
 
 async function cachedSubmitGuess(
   puzzle_number: number,
@@ -119,6 +126,7 @@ function getStats() {
       today_chel_number: today_chel_number,
     };
     storage.setItem("stats", JSON.stringify(stats));
+    storage.setItem("firstday", String(puzzle_number));
 
     // 도전 횟수 증가용 (처음 +1) Q. 이게 있어야 맞느거 같은데 없어야 맞음 왜지?
     // const chk_stats_chel = storage.getItem("stats");
@@ -237,8 +245,8 @@ async function guessHandler(word: string) {
     // 정답이면?
     if (tmp.similarity === "100.00" && game_clear === "-1") {
       // 포기 버튼 사라지게
-      game_over_dashboard = "false";
-      result_dashboard = true;
+      game_over_dashboard = "true";
+      // result_dashboard.value = true;
       game_clear = "1";
       // 클리어 기록
       storage.setItem("game_clear", game_clear);
@@ -381,20 +389,26 @@ async function giveUp() {
   }
 }
 
+function testOption() {
+  console.log(option_toggle);
+  option_toggle = true;
+  console.log(option_toggle);
+}
+
 onMounted(async () => {
   await loadBasicInfo();
 });
 </script>
-
+<!-- :option_toggle="option_toggle" -->
 <template>
   <Banner></Banner>
   <div class="container">
     <header>
       <h2>꼬맨틀 - 단어 유사도 추측 게임</h2>
-      <Menu></Menu>
+      <Menu @option_toggle="option_toggle" @click="testOption()"></Menu>
     </header>
     <!-- 설정 부분 TODO -->
-    <Dialog></Dialog>
+    <Dialog v-if="option_toggle"></Dialog>
     <!-- 작업!TODO -->
     <SimilarityStory
       v-if="last_similarity_story !== null"
@@ -417,6 +431,7 @@ onMounted(async () => {
       :conti_ans_number="conti_ans_number"
       :giveup_number="giveup_number"
       :today_chal_number="guess_data.length"
+      :first_day="first_day"
     ></Reusult>
     <FailResult
       v-if="game_over_dashboard === 'true'"
@@ -426,6 +441,7 @@ onMounted(async () => {
       :conti_ans_number="conti_ans_number"
       :giveup_number="giveup_number"
       :today_chal_number="guess_data.length"
+      :first_day="first_day"
     ></FailResult>
     <table id="guesses">
       <!-- v-if="answering" -->
@@ -465,7 +481,9 @@ onMounted(async () => {
         </tr>
         <!-- 밑 줄 -->
         <tr>
-          <td colspan="4"><hr id="line" /></td>
+          <td colspan="4" v-if="answering_top_row === true">
+            <hr id="line" />
+          </td>
         </tr>
         <!-- 마지막 단어가 막 들어온 경우 -->
         <tr

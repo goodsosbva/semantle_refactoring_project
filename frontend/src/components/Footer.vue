@@ -111,14 +111,22 @@
           >어제의 정답 단어는 <b>"{{ yesterday_keyword }}"</b>입니다.</span
         >
       </li>
-      <li>
+      <!-- link 부분 -->
+      <span id="yesterday-nearest1k"
+        ><router-link to="/nearest1k" :puzzle_number="puzzle_number"
+          >유사도 기준 상위 1000개의 단어</router-link
+        >를 확인할 수 있습니다.</span
+      >
+
+      <!-- old -->
+      <!-- <li>
         <span id="yesterday-nearest1k"
           >정답 단어와 비슷한,
           <a :href="'/nearest1k/' + puzzle_number"
             >유사도 기준 상위 1000개의 단어</a
           >를 확인할 수 있습니다.</span
         >
-      </li>
+      </li> -->
     </ul>
 
     <p><b>Q. 플레이 기록을 볼 수 있나요?</b></p>

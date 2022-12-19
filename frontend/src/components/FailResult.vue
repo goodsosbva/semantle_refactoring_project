@@ -7,13 +7,16 @@
       ><br />정답 단어와 비슷한,
       <a href="/nearest1k/256">상위 1000개의 단어</a>를 확인해보세요.
     </p>
-    <input
+    <!-- old -->
+    <!-- <input
       type="button"
       value="기록 복사하기"
       id="result"
       onclick="share()"
       class="button"
-    /><br /><br />
+    /><br /> -->
+    <Clip id="clip" :puzzle_number="puzzle_number"></Clip>
+    <br />
     {{ puzzle_number }}번째 꼬맨틀은 오늘 밤 자정(한국 시간 기준)에 열립니다.<br />
     <br />
     <b>나의 플레이 기록</b>: <br />
@@ -21,7 +24,7 @@
       <tbody>
         <tr>
           <th>가장 처음 풀었던 꼬맨틀 번호:</th>
-          <td>{{ puzzle_number }}</td>
+          <td>{{ first_day }}</td>
         </tr>
         <tr>
           <th>도전한 게임 횟수:</th>
@@ -49,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import Clip from "./Clipboard.vue";
+
 const props = defineProps<{
   puzzle_number: number;
   chal_number: number; // 도전한 게임 횟수
@@ -56,5 +61,6 @@ const props = defineProps<{
   conti_ans_number: number; // 연속 성공 넘버
   giveup_number: number; // 포기했을 때 넘버
   today_chal_number: number; // 전체 돋전 횟수?
+  first_day: string | null; // 처음한 날짜
 }>();
 </script>

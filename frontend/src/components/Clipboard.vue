@@ -1,44 +1,109 @@
 <template>
-  <h1>클립보드 구현하기</h1>
   <div>
-    <p class="clipboard">Merry X-mas</p>
-    <input ref="inputEl" type="hidden" value="그만 행복하세요 ^^7" />
-    <button @click="handleCopy">클립보드 복사하기</button>
+    <!-- value="이럴 수가! 첫번째 추측에서 260번째 꼬맨틀 정답 단어를 맞췄습니다!
+            https://semantle-ko.newsjel.ly/" -->
+    <input
+      ref="inputEl"
+      type="hidden"
+      :value="
+        '이럴 수가! 첫번째 추측에서 ' +
+        puzzle_number +
+        '번째 꼬맨틀 정답 단어를 맞췄습니다! https://semantle-ko.newsjel.ly/'
+      "
+    />
+    <button @click="handleCopy" class="button">기록 복사하기</button>
   </div>
-  <input type="text" placeholder="복사한 것을 붙여넣으세요" />
 </template>
 
-<script setup>
+<!-- "post.title + ' by ' + post.author.name" -->
+
+<script setup lang="ts">
 import { ref } from "vue";
 
-// 숨겨진 요소를 직접 접근할 수 있도록 변수를 선언
-const inputEl = ref(null);
+const props = defineProps<{
+  puzzle_number: number;
+}>();
+
+const inputEl = ref<null | HTMLInputElement>(null);
 
 const handleCopyForIE = () => {
-  // hidden이었던 input의 타입을 text로 변경한다.
-  inputEl.value.setAttribute("type", "text");
-  // input을 선택한다.
-  inputEl.value.select();
-  // 복사를 수행한다.
+  inputEl?.value?.setAttribute("type", "text");
+  inputEl?.value?.select();
   document.execCommand("copy");
-  // text 타입을 hidden으로 변경한다.
-  inputEl.value.setAttribute("type", "hidden");
-  alert("execCommand를 통해 내용이 복사되었습니다");
+  inputEl?.value?.setAttribute("type", "hidden");
+  alert(`execCommand를 통해 내용이 복사되었습니다 ${props.puzzle_number}`);
 };
 
 const handleCopy = () => {
   if (inputEl.value === null) {
     return;
   }
-  // clipboard를 지원하지 않는다면,
-  // execCommand를 통해 복사할 수 있도록 한다.
   if (!navigator.clipboard) {
     handleCopyForIE();
     return;
   }
+
   navigator.clipboard
     .writeText(inputEl.value.value)
-    .then(() => alert("clipboard API를 통해 내용이 복사되었습니다"))
-    .catch(() => handleCopyForIE());
+    .then(() => alert("클립보드가 복사되었습니다"))
+    .catch((e) => {
+      console.log(e.message);
+      handleCopyForIE();
+    });
 };
 </script>
+<!-- <script>
+import { ref } from "vue";
+
+export default {
+  name: "Clip",
+  props: {
+    puzzle_number: Number,
+  },
+  setup() {
+    const inputEl = ref(null);
+
+    const handleCopyForIE = () => {
+      inputEl.value.setAttribute("type", "text");
+      inputEl.value.select();
+      document.execCommand("copy");
+      inputEl.value.setAttribute("type", "hidden");
+      alert(`execCommand를 통해 내용이 복사되었습니다 ${props.puzzle_number}`);
+    };
+
+    const handleCopy = () => {
+      if (inputEl.value === null) {
+        return;
+      }
+      if (!navigator.clipboard) {
+        handleCopyForIE();
+        return;
+      }
+
+      navigator.clipboard
+        .writeText(inputEl.value.value)
+        .then(() => alert("클립보드가 복사되었습니다"))
+        .catch((e) => {
+          console.log(e.message);
+          handleCopyForIE();
+        });
+    };
+
+    return {
+      inputEl,
+      handleCopy,
+    };
+  },
+};
+</script> -->
+
+<style scoped>
+.clipboard {
+  padding: 1rem;
+  border: 1px solid gray;
+}
+.button {
+  padding: 9px;
+  margin-bottom: -15px;
+}
+</style>

@@ -1,7 +1,12 @@
 <template>
   <!-- 설정 톱니바퀴 TODO -->
   <nav id="menu">
-    <button aria-label="Settings" class="overlay-button" id="settings-button">
+    <button
+      aria-label="Settings"
+      class="overlay-button"
+      id="settings-button"
+      @click="option()"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -20,3 +25,14 @@
     </button>
   </nav>
 </template>
+
+<script setup lang="ts">
+const emit = defineEmits<{
+  (e: "option_toggle", flag: any): any;
+}>();
+
+function option() {
+  console.log("clked option!");
+  emit("option_toggle", true);
+}
+</script>

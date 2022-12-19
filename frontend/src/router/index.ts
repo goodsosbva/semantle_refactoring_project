@@ -1,16 +1,16 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Words from "@/views/words.vue";
-import Main from "@/views/Main.vue";
+import Words from "../components/Words.vue";
+import Home from "../App.vue";
 
 const routes = [
   {
     path: "/",
-    name: "Main Page",
-    component: Main,
+    name: "index",
+    component: Home,
   },
   {
-    path: "/words",
-    name: "words 1000",
+    path: "/nearest1k",
+    name: "nearest1k",
     component: Words,
   },
 ];
