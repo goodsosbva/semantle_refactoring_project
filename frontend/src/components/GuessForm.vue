@@ -17,7 +17,7 @@
           id="guess"
           :value="input_word"
           @input="event => input_word = (event.target as HTMLInputElement).value"
-          v-on:keyup.enter="clicked_input()"
+          @keyup.enter="clicked_input()"
         />
         <input
           type="button"
@@ -32,20 +32,18 @@
 </template>
 
 <script setup lang="ts">
-// @click="emit('guess', input_word)"
 import { ref } from "vue";
 
 const emit = defineEmits<{
-  (e: "guess1", word: string): void;
-  // (e: "guess2", is_clear: boolean): boolean;
+  (e: "guess", word: string): void;
 }>();
 
 const input_word = ref<string>("");
 
 function clicked_input() {
   console.log("clicked_input!");
-  emit("guess1", input_word.value);
-  // emit("guess2", true);
+  emit("guess", input_word.value);
   input_word.value = "";
 }
 </script>
+

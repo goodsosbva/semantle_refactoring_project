@@ -14,19 +14,19 @@ export default defineConfig({
   server: {
     proxy: {
       "/guess": {
-        target: "http://localhost:8899",
+        target: "https://semantle-ko.newsjel.ly/",
         changeOrigin: true,
       },
       "/yesterday": {
-        target: "http://localhost:8899",
+        target: "https://semantle-ko.newsjel.ly/",
         changeOrigin: true,
       },
       "/similarity": {
-        target: "http://localhost:8899",
+        target: "https://semantle-ko.newsjel.ly/",
         changeOrigin: true,
       },
       "/giveup": {
-        target: "http://localhost:8899",
+        target: "https://semantle-ko.newsjel.ly/",
         changeOrigin: true,
       },
     },

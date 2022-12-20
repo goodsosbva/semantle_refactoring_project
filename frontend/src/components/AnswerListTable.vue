@@ -1,84 +1,25 @@
 <template>
   <table id="guesses">
-    <!-- v-if="answering" -->
     <tbody>
-      <tr v-if="answering_top_row === true">
-        <th id="chronoOrder" @click="updateSort('number')">#</th>
-        <th id="alphaOrder" @click="updateSort('word')">추측한 단어</th>
-        <th id="similarityOrder" @click="updateSort('similarity')">유사도</th>
-        <th>유사도 순위</th>
-        <br />
-      </tr>
+      <AnswerListTableRowHeader @update_sort="updateSort" />
       <!-- 가장 최근 입력! -->
-      <tr v-if="last_word !== null">
-        <td>{{ last_word.cnt }}</td>
-        <td class="highlight">{{ last_word.word }}</td>
-        <td>{{ last_word.similarity.toFixed(2) }}</td>
-        <td
-          v-if="
-            last_word.rank !== '1000위 이상' &&
-            last_word.rank !== '정답!' &&
-            last_word.rank !== '정답'
-          "
-        >
-          <BarGraphVue :value="Number.parseFloat(last_word.rank)"></BarGraphVue>
-        </td>
-        <td v-if="last_word.rank === '정답!'">{{ last_word.rank }}</td>
-        <td v-if="last_word.rank === '1000위 이상'">{{ last_word.rank }}</td>
-        <td v-if="last_word.rank === '정답'">{{ last_word.rank }}</td>
-      </tr>
+      <AnswerListTableRowWord
+        v-if="last_word !== null"
+        :word="last_word"
+        :is_highlighted="true"
+      />
       <!-- 밑 줄 -->
       <tr>
-        <td colspan="4" v-if="answering_top_row === true">
+        <td colspan="4">
           <hr class="line" />
         </td>
       </tr>
-      <!-- 마지막 단어가 막 들어온 경우 -->
-      <tr
-        v-if="last_word !== null"
-        v-for="(word, index) in sorted_guess_data.filter(
-          (data) => data.cnt !== new_word_idx
-        )"
+      <AnswerListTableRowWord
+        v-for="(word, index) in guess_data_to_display"
         :key="index"
-      >
-        <td>{{ word.cnt }}</td>
-        <td>{{ word.word }}</td>
-        <td>{{ word.similarity.toFixed(2) }}</td>
-        <td
-          v-if="
-            word.rank !== '1000위 이상' &&
-            word.rank !== '정답!' &&
-            word.rank !== '정답'
-          "
-        >
-          <BarGraphVue :value="Number.parseFloat(word.rank)"></BarGraphVue>
-        </td>
-        <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
-        <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
-        <td v-if="word.rank === '정답'">{{ word.rank }}</td>
-      </tr>
-      <!-- 막 안들어온 경우 -->
-      <tr
-        v-if="last_word === null"
-        v-for="(word, index) in sorted_guess_data"
-        :key="index"
-      >
-        <td>{{ word.cnt }}</td>
-        <td>{{ word.word }}</td>
-        <td>{{ word.similarity.toFixed(2) }}</td>
-        <td
-          v-if="
-            word.rank !== '1000위 이상' &&
-            word.rank !== '정답!' &&
-            word.rank !== '정답'
-          "
-        >
-          <BarGraphVue :value="Number.parseFloat(word.rank)"></BarGraphVue>
-        </td>
-        <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
-        <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
-        <td v-if="word.rank === '정답'">{{ word.rank }}</td>
-      </tr>
+        :word="word"
+        :is_highlighted="false"
+      />
     </tbody>
   </table>
 </template>
@@ -89,15 +30,15 @@ import { computed, ref } from "vue";
 import type { GuessItemInterface, SortTargetInterface } from "../interface";
 
 import { number_sort, word_sort, similarity_sort } from "../sorts";
-import BarGraphVue from "./BarGraph.vue";
+import AnswerListTableRowHeader from "./AnswerListTableRowHeader.vue";
+import AnswerListTableRowWord from "./AnswerListTableRowWord.vue";
 
 const sort_target = ref<SortTargetInterface>("similarity");
 const sort_reversed = ref<boolean>(true);
 
 const props = defineProps<{
-  answering_top_row: boolean;
-  last_word: GuessItemInterface | null; // 도전한 게임 횟수
-  new_word_idx: number;
+  last_word: GuessItemInterface | null;
+  last_word_index: number | null;
   guess_data: GuessItemInterface[];
 }>();
 
@@ -124,6 +65,16 @@ const sorted_guess_data = computed(() => {
   }
   return props.guess_data;
 });
+
+const guess_data_to_display = computed(() => {
+  if (props.last_word === null) {
+    return sorted_guess_data.value;
+  } else {
+    return sorted_guess_data.value.filter(
+      (data) => data.cnt !== props.last_word_index
+    );
+  }
+});
 </script>
 
 <style scoped>
@@ -135,3 +86,4 @@ const sorted_guess_data = computed(() => {
   font-weight: bold;
 }
 </style>
+

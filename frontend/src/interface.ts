@@ -28,3 +28,17 @@ export interface GuessItemInterface {
   similarity: number;
   rank: string;
 }
+
+export interface StatsInterface {
+  abandons: number;
+  firstPlay: number | null;
+  giveups: number;
+  lastEnd: number;
+  lastPlay: number;
+  playStreak: number;
+  totalGuesses: number;
+  totalPlays: number;
+  winStreak: number;
+  wins: number;
+}
+

@@ -6,7 +6,7 @@
       <span
         class="progress-bar"
         :style="{
-          width: caculated_value + 'px',
+          width: caculated_value + '%',
         }"
         >&nbsp;</span
       >
@@ -24,3 +24,4 @@ const caculated_value = computed(() => {
   return (1001 - props.value) / 10;
 });
 </script>
+
