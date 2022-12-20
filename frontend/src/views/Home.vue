@@ -21,6 +21,7 @@ import Footer from "../components/Footer.vue";
 import Result from "../components/Result.vue";
 import FailResult from "../components/FailResult.vue";
 import BarGraphVue from "../components/BarGraph.vue";
+import AnswerListTable from "../components/AnswerListTable.vue";
 
 // 정렬 관련 함수
 import { number_sort, word_sort, similarity_sort } from "../sorts";
@@ -46,7 +47,9 @@ const storage = window.localStorage;
 let game_over_dashboard: string = "false";
 let idx: number = 1;
 let new_word_idx = -1;
+
 // 데이터 저장용
+// table
 const guess_data = ref<GuessItemInterface[]>([]);
 
 // 가장 마지막에 온놈 관련 변수.
@@ -68,6 +71,7 @@ const first_play = ref<number>(-1);
 let game_clear: string = "-1";
 
 // 정렬 관련 toggle용
+// table
 const sort_target = ref<SortTargetInterface>("similarity");
 const sort_reversed = ref<boolean>(true);
 
@@ -229,6 +233,7 @@ async function guessHandler(word: string) {
     // last word for memorize
     last_word.value = tmp;
     // 가장 최신에 들어온 친구
+    // table
     new_word_idx = tmp.cnt;
     console.log(last_word);
     console.log(guess_data);
@@ -388,6 +393,7 @@ function testOption() {
   console.log(option_toggle);
 }
 
+// table
 function updateSort(clicked_target: SortTargetInterface) {
   if (clicked_target === sort_target.value) {
     sort_reversed.value = !sort_reversed.value;
@@ -401,6 +407,7 @@ function updateSort(clicked_target: SortTargetInterface) {
   }
 }
 
+// table
 const sorted_guess_data = computed(() => {
   if (sort_target.value === "number") {
     return number_sort(sort_reversed.value, guess_data.value);
@@ -460,91 +467,15 @@ onMounted(async () => {
       :today_chal_number="guess_data.length"
       :first_day="first_day"
     ></FailResult>
-    <table id="guesses">
-      <!-- v-if="answering" -->
-      <tbody>
-        <tr v-if="answering_top_row === true">
-          <th id="chronoOrder" @click="updateSort('number')">#</th>
-          <th id="alphaOrder" @click="updateSort('word')">추측한 단어</th>
-          <th id="similarityOrder" @click="updateSort('similarity')">유사도</th>
-          <th>유사도 순위</th>
-          <br />
-        </tr>
-        <!-- 가장 최근 입력! -->
-        <tr v-if="last_word !== null">
-          <td>{{ last_word.cnt }}</td>
-          <td>{{ last_word.word }}</td>
-          <td>{{ last_word.similarity.toFixed(2) }}</td>
-          <td
-            v-if="
-              last_word.rank !== '1000위 이상' &&
-              last_word.rank !== '정답!' &&
-              last_word.rank !== '정답'
-            "
-          >
-            <BarGraphVue
-              :value="Number.parseFloat(last_word.rank)"
-            ></BarGraphVue>
-          </td>
-          <td v-if="last_word.rank === '정답!'">{{ last_word.rank }}</td>
-          <td v-if="last_word.rank === '1000위 이상'">{{ last_word.rank }}</td>
-          <td v-if="last_word.rank === '정답'">{{ last_word.rank }}</td>
-        </tr>
-        <!-- 밑 줄 -->
-        <tr>
-          <td colspan="4" v-if="answering_top_row === true">
-            <hr id="line" />
-          </td>
-        </tr>
-        <!-- 마지막 단어가 막 들어온 경우 -->
-        <tr
-          v-if="last_word !== null"
-          v-for="(word, index) in sorted_guess_data.slice(
-            0,
-            guess_data.length - 1
-          )"
-          :key="index"
-        >
-          <td>{{ word.cnt }}</td>
-          <td>{{ word.word }}</td>
-          <td>{{ word.similarity.toFixed(2) }}</td>
-          <td
-            v-if="
-              word.rank !== '1000위 이상' &&
-              word.rank !== '정답!' &&
-              word.rank !== '정답'
-            "
-          >
-            <BarGraphVue :value="Number.parseFloat(word.rank)"></BarGraphVue>
-          </td>
-          <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
-          <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
-          <td v-if="word.rank === '정답'">{{ word.rank }}</td>
-        </tr>
-        <!-- 막 안들어온 경우 -->
-        <tr
-          v-if="last_word === null"
-          v-for="(word, index) in sorted_guess_data"
-          :key="index"
-        >
-          <td>{{ word.cnt }}</td>
-          <td>{{ word.word }}</td>
-          <td>{{ word.similarity.toFixed(2) }}</td>
-          <td
-            v-if="
-              word.rank !== '1000위 이상' &&
-              word.rank !== '정답!' &&
-              word.rank !== '정답'
-            "
-          >
-            <BarGraphVue :value="Number.parseFloat(word.rank)"></BarGraphVue>
-          </td>
-          <td v-if="word.rank === '정답!'">{{ word.rank }}</td>
-          <td v-if="word.rank === '1000위 이상'">{{ word.rank }}</td>
-          <td v-if="word.rank === '정답'">{{ word.rank }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <AnswerListTable
+      :new_word_idx="new_word_idx"
+      :answering_top_row="answering_top_row"
+      :last_word="last_word"
+      :sorted_guess_data="sorted_guess_data"
+      :guess_data="guess_data"
+      :sort_target="sort_target"
+      :sort_reversed="sort_reversed"
+    ></AnswerListTable>
 
     <input
       type="button"
@@ -563,12 +494,4 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped>
-#line {
-  height: 1px;
-}
-#highlight {
-  color: rgb(19, 92, 201);
-  font-weight: bold;
-}
-</style>
+<style scoped></style>
