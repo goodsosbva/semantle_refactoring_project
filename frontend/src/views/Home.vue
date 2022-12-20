@@ -20,11 +20,8 @@ import GuessForm from "../components/GuessForm.vue";
 import Footer from "../components/Footer.vue";
 import Result from "../components/Result.vue";
 import FailResult from "../components/FailResult.vue";
-import BarGraphVue from "../components/BarGraph.vue";
 import AnswerListTable from "../components/AnswerListTable.vue";
 
-// 정렬 관련 함수
-import { number_sort, word_sort, similarity_sort } from "../sorts";
 // 중복 체크 함수
 import { duplicateChk } from "../functions/dupchk";
 
@@ -43,13 +40,11 @@ const error_text = ref<string>("");
 const cache: GuessCacheInterface = {};
 const storage = window.localStorage;
 // 추측 관련
-// let guess_count = ref<any>(0);
 let game_over_dashboard: string = "false";
 let idx: number = 1;
 let new_word_idx = -1;
 
 // 데이터 저장용
-// table
 const guess_data = ref<GuessItemInterface[]>([]);
 
 // 가장 마지막에 온놈 관련 변수.
@@ -79,9 +74,6 @@ const sort_reversed = ref<boolean>(true);
 const first_day: string | null = storage.getItem("firstday");
 // const first_day: string | null = "127";
 
-// 옵션 관련
-let option_toggle: any = false;
-
 async function cachedSubmitGuess(
   puzzle_number: number,
   word: string
@@ -94,21 +86,6 @@ async function cachedSubmitGuess(
     cache[word] = result as GuessResultInterface;
   }
   return result;
-}
-
-// 추측 시작 - 날짜가 다르면 초기화 해주는 함수
-function dayCheck() {
-  // 목표. 현재 퍼즐넘버랑 저장된 퍼즐 넘버랑 다르면 guesses 초기화
-  const chk_stats_puzzle_number = storage.getItem("stats");
-
-  const before_puzzle_number = JSON.parse(chk_stats_puzzle_number as string);
-  if (before_puzzle_number.puzzle_number === null) {
-    return true;
-  } else {
-    if (before_puzzle_number.puzzle_number !== String(puzzle_number)) {
-      return false;
-    }
-  }
 }
 
 // 어제날짜 테스트용 함수
@@ -170,13 +147,6 @@ function getStats() {
       chal_number = chk_stats_chel_obj["chal_number"];
       console.log(chk_stats_chel_obj);
       storage.setItem("stats", JSON.stringify(chk_stats_chel_obj));
-    } else {
-      // 도전 횟수 증가용
-      // const chk_stats_chel = storage.getItem("stats");
-      // const chk_stats_chel_obj = JSON.parse(chk_stats_chel as string);
-      // chk_stats_chel_obj["chal_number"]++;
-      // console.log(chk_stats_chel_obj);
-      // storage.setItem("stats", JSON.stringify(chk_stats_chel_obj));
     }
     return old_stats_obj;
   }
@@ -186,8 +156,6 @@ function getStats() {
 async function guessHandler(word: string) {
   let guess = word.trim().replace("!", "").replace("*", "").replace(/\//g, "");
   const submit_word = await cachedSubmitGuess(puzzle_number, guess);
-  // q. 갑자기 true/false가 왜 안먹지?
-  console.log(answering_top_row);
   answering_top_row.value = true;
   sessionStorage.setItem("answering_top_row", answering_top_row.value);
 
@@ -387,52 +355,18 @@ async function giveUp() {
   }
 }
 
-function testOption() {
-  console.log(option_toggle);
-  option_toggle = true;
-  console.log(option_toggle);
-}
-
-// table
-function updateSort(clicked_target: SortTargetInterface) {
-  if (clicked_target === sort_target.value) {
-    sort_reversed.value = !sort_reversed.value;
-  } else {
-    sort_target.value = clicked_target;
-    if (clicked_target === "similarity") {
-      sort_reversed.value = true;
-    } else {
-      sort_reversed.value = false;
-    }
-  }
-}
-
-// table
-const sorted_guess_data = computed(() => {
-  if (sort_target.value === "number") {
-    return number_sort(sort_reversed.value, guess_data.value);
-  } else if (sort_target.value === "word") {
-    return word_sort(sort_reversed.value, guess_data.value);
-  } else if (sort_target.value === "similarity") {
-    return similarity_sort(sort_reversed.value, guess_data.value);
-  }
-  return guess_data.value;
-});
-
 onMounted(async () => {
   await loadBasicInfo();
 });
 </script>
-<!-- :option_toggle="option_toggle" -->
 <template>
   <Banner></Banner>
   <div class="container">
     <header>
       <h2>꼬맨틀 - 단어 유사도 추측 게임</h2>
-      <Menu @option_toggle="option_toggle" @click="testOption()"></Menu>
+      <!-- 설정 -->
+      <Menu></Menu>
     </header>
-    <!-- 설정 부분 TODO -->
-    <Dialog v-if="option_toggle"></Dialog>
     <!-- 작업!TODO -->
     <SimilarityStory
       v-if="last_similarity_story !== null"
@@ -471,10 +405,7 @@ onMounted(async () => {
       :new_word_idx="new_word_idx"
       :answering_top_row="answering_top_row"
       :last_word="last_word"
-      :sorted_guess_data="sorted_guess_data"
       :guess_data="guess_data"
-      :sort_target="sort_target"
-      :sort_reversed="sort_reversed"
     ></AnswerListTable>
 
     <input

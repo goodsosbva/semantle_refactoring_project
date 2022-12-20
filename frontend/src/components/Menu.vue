@@ -5,7 +5,7 @@
       aria-label="Settings"
       class="overlay-button"
       id="settings-button"
-      @click="option()"
+      @click="click_deliver()"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -24,15 +24,23 @@
       </svg>
     </button>
   </nav>
+  <!-- 설정 부분 TODO -->
+  <Dialog v-if="diplay_toggle" @close_value="click_close"></Dialog>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: "option_toggle", flag: any): any;
-}>();
+import { ref } from "vue";
+import Dialog from "./Dialog.vue";
 
-function option() {
+const diplay_toggle = ref<boolean>(false);
+
+function click_deliver() {
   console.log("clked option!");
-  emit("option_toggle", true);
+  diplay_toggle.value = !diplay_toggle.value;
+}
+
+function click_close(close_value: any) {
+  console.log("click_close!!!!");
+  diplay_toggle.value = close_value;
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog-underlay" id="settings-underlay">
+  <div>
     <div
       class="dialog"
       id="settings"
@@ -7,7 +7,12 @@
       aria-modal="true"
       role="dialog"
     >
-      <button class="dialog-close" id="settings-close" aria-label="Schließen">
+      <button
+        class="dialog-close"
+        id="settings-close"
+        aria-label="Schließen"
+        @click="receive_closer()"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -22,7 +27,7 @@
           <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </button>
-      <div class="dialog-content" id="settings-content">
+      <div class="dialog-content border" id="settings-content">
         <h3 id="settings-heading">설정</h3>
         <div>
           <input
@@ -30,6 +35,7 @@
             name="dark-mode"
             value="dark-mode"
             id="dark-mode"
+            @click="dark_function()"
           />
           <label for="dark-mode">다크 모드</label>
         </div>
@@ -69,4 +75,39 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+
+const storage = window.localStorage;
+const emit = defineEmits<{
+  (e: "close_value", display_toggle: any): void;
+}>();
+
+function receive_closer() {
+  console.log("close!!");
+  emit("close_value", false);
+}
+
+function dark_function() {
+  console.log("dark!");
+  let darkMode = storage.getItem("darkMode");
+  if (darkMode !== "true") {
+    document.body.classList.add("dark");
+    storage.setItem("darkMode", "true");
+  } else {
+    document.body.classList.remove("dark");
+    storage.setItem("darkMode", "false");
+  }
+}
+
+let darkMode = storage.getItem("darkMode");
+if (darkMode === "true") {
+  document.body.classList.add("dark");
+}
+</script>
+
+<style scoped>
+.border {
+  border: 4mm ridge rgba(0, 0, 0, 0.6);
+}
+</style>

@@ -7,14 +7,6 @@
       ><br />정답 단어와 비슷한,
       <a href="/nearest1k/256">상위 1000개의 단어</a>를 확인해보세요.
     </p>
-    <!-- old -->
-    <!-- <input
-      type="button"
-      value="기록 복사하기"
-      id="result"
-      onclick="share()"
-      class="button"
-    /><br /> -->
     <Clip id="clip" :puzzle_number="puzzle_number"></Clip>
     <br />
     {{ puzzle_number }}번째 꼬맨틀은 오늘 밤 자정(한국 시간 기준)에 열립니다.<br />
