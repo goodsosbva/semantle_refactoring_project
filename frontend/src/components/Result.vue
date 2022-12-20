@@ -8,7 +8,11 @@
       <a href="/nearest1k/256">상위 1000개의 단어</a>를 확인해보세요.
     </p>
     <!-- Trigger -->
-    <Clip id="clip" :puzzle_number="puzzle_number"></Clip>
+    <Clip
+      id="clip"
+      :puzzle_number="puzzle_number"
+      :guess_data="guess_data"
+    ></Clip>
     <!-- <input
       type="button"
       value="기록 복사하기"
@@ -54,6 +58,7 @@
 <script setup lang="ts">
 import { createApp, ref } from "vue";
 import Clip from "./Clipboard.vue";
+import type { GuessItemInterface } from "../interface";
 
 // 클립보드 관련
 const props = defineProps<{
@@ -64,6 +69,7 @@ const props = defineProps<{
   giveup_number: number; // 포기했을 때 넘버
   today_chal_number: number; // 전체 돋전 횟수?
   first_day: string | null; // 처음한 날짜
+  guess_data: GuessItemInterface[];
 }>();
 
 // 클립보드 복사

@@ -112,6 +112,20 @@ def get_nearest_1k(day: int):
     return render_template('top1k.html', word=solution, words=words, day=day)
 
 
+@app.route('/nearest1k-data/<int:day>')
+def get_nearest_1k_data(day: int):
+    if day not in app.secrets:
+        return "이 날의 가장 유사한 단어는 현재 사용할 수 없습니다. 그저께부터 내일까지만 확인할 수 있습니다.", 404
+    solution = app.secrets[day]
+    words = [
+        dict(
+            word=w,
+            rank=k[0],
+            similarity="%0.2f" % (k[1] * 100))
+        for w, k in app.nearests[day].items() if w != solution]
+    return jsonify(words)
+
+
 @app.route('/giveup/<int:day>')
 def give_up(day: int):
     if day not in app.secrets:

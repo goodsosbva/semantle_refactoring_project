@@ -65,11 +65,6 @@ const first_play = ref<number>(-1);
 
 let game_clear: string = "-1";
 
-// 정렬 관련 toggle용
-// table
-const sort_target = ref<SortTargetInterface>("similarity");
-const sort_reversed = ref<boolean>(true);
-
 // 첫날
 const first_day: string | null = storage.getItem("firstday");
 // const first_day: string | null = "127";
@@ -111,15 +106,6 @@ function getStats() {
     };
     storage.setItem("stats", JSON.stringify(stats));
     storage.setItem("firstday", String(puzzle_number));
-
-    // 도전 횟수 증가용 (처음 +1) Q. 이게 있어야 맞느거 같은데 없어야 맞음 왜지?
-    // const chk_stats_chel = storage.getItem("stats");
-    // const chk_stats_chel_obj = JSON.parse(chk_stats_chel as string);
-    // chk_stats_chel_obj["chal_number"]++;
-    // chal_number = chk_stats_chel_obj["chal_number"];
-    // console.log(chk_stats_chel_obj);
-    // storage.setItem("stats", JSON.stringify(chk_stats_chel_obj));
-
     return stats;
   } else {
     // 이전이랑 현재의 하루가 다들때!
@@ -217,8 +203,8 @@ async function guessHandler(word: string) {
     // 정답이면?
     if (tmp.similarity === 100 && game_clear === "-1") {
       // 포기 버튼 사라지게
-      game_over_dashboard = "true";
-      // result_dashboard.value = true;
+      // game_over_dashboard = "true";
+      result_dashboard.value = true;
       game_clear = "1";
       // 클리어 기록
       storage.setItem("game_clear", game_clear);
@@ -390,6 +376,7 @@ onMounted(async () => {
       :giveup_number="giveup_number"
       :today_chal_number="guess_data.length"
       :first_day="first_day"
+      :guess_data="guess_data"
     ></Result>
     <FailResult
       v-if="game_over_dashboard === 'true'"

@@ -37,7 +37,7 @@
             id="dark-mode"
             @click="dark_function()"
           />
-          <label for="dark-mode">다크 모드</label>
+          <label for="dark-mode"> 다크 모드</label>
         </div>
         <div>
           <input
@@ -45,9 +45,10 @@
             name="share-guesses"
             value="share-guesses"
             id="share-guesses"
+            @click="test_time_result_render()"
           />
-          <label for="share-guesses"
-            >결과 공유 텍스트에 추측 횟수 표시하기</label
+          <label for="share-guesses">
+            결과 공유 텍스트에 추측 횟수 표시하기</label
           >
         </div>
         <div>
@@ -57,7 +58,7 @@
             value="share-time"
             id="share-time"
           />
-          <label for="share-time">결과 공유 텍스트에 걸린 시간 표시하기</label>
+          <label for="share-time"> 결과 공유 텍스트에 걸린 시간 표시하기</label>
         </div>
         <div>
           <input
@@ -65,9 +66,10 @@
             name="share-top-guess"
             value="share-top-guess"
             id="share-top-guess"
+            @click="test_similarity_render()"
           />
-          <label for="share-top-guess"
-            >결과 공유 텍스트에 최대 유사도 표시하기</label
+          <label for="share-top-guess">
+            결과 공유 텍스트에 최대 유사도 표시하기</label
           >
         </div>
       </div>
@@ -100,6 +102,27 @@ function dark_function() {
   }
 }
 
+function test_time_result_render() {
+  let test_time = storage.getItem("test_time");
+  console.log(test_time);
+  if (test_time === "false" || test_time === null) {
+    storage.setItem("test_time", "true");
+  } else {
+    storage.setItem("test_time", "false");
+  }
+}
+
+function test_similarity_render() {
+  let test_similarity = storage.getItem("test_similarity");
+  console.log(test_similarity);
+  if (test_similarity === "false" || test_similarity === null) {
+    storage.setItem("test_similarity", "true");
+  } else {
+    storage.setItem("test_similarity", "false");
+  }
+}
+
+// 다크모드 유지
 let darkMode = storage.getItem("darkMode");
 if (darkMode === "true") {
   document.body.classList.add("dark");
