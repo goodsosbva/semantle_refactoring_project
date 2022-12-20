@@ -45,6 +45,7 @@ const storage = window.localStorage;
 // let guess_count = ref<any>(0);
 let game_over_dashboard: string = "false";
 let idx: number = 1;
+let new_word_idx = -1;
 // 데이터 저장용
 const guess_data = ref<GuessItemInterface[]>([]);
 
@@ -177,20 +178,14 @@ function getStats() {
   }
 }
 
-// guesses에 넣는 함수
-function guess_store_handler(data: any) {
-  // 순서, 추측한 단어, 유사도, 유사도 순위 순으로 저장
-  // console.log(data);
-  storage.setItem("guesses", JSON.stringify(data));
-  return data;
-}
-
 //
 async function guessHandler(word: string) {
   let guess = word.trim().replace("!", "").replace("*", "").replace(/\//g, "");
   const submit_word = await cachedSubmitGuess(puzzle_number, guess);
   // q. 갑자기 true/false가 왜 안먹지?
+  console.log(answering_top_row);
   answering_top_row.value = true;
+  sessionStorage.setItem("answering_top_row", answering_top_row.value);
 
   if (submit_word === null) {
     error_text.value = "알 수 없는 오류입니다.";
@@ -233,10 +228,14 @@ async function guessHandler(word: string) {
     guess_data.value.push(tmp);
     // last word for memorize
     last_word.value = tmp;
+    // 가장 최신에 들어온 친구
+    new_word_idx = tmp.cnt;
     console.log(last_word);
+    console.log(guess_data);
     // guess_count++;
     const old_stats = storage.getItem("stats");
     const stats = JSON.parse(old_stats as string); //
+    console.log(stats);
     stats["today_chel_number"]++;
     const new_stats = JSON.stringify(stats);
     storage.setItem("stats", new_stats);
@@ -267,19 +266,10 @@ async function guessHandler(word: string) {
     }
 
     // 로컬 저장소 저장 작업 시작!!
-
-    // 1. 첫 시작인 경우 로컬 초기화 - 어제한게 겹쳐졌는지도 체크
-    // const is_ok = dayCheck();
-
-    // 2. 인풋이 들어갈때 마다 로컬 guesses[]에 내가 입력한 단어의 결과값들이 저장되게 한다.
-    // 2-1. 지금이랑 저장된 puz_num이 같은 경우
-    // 2-2. 다른 경우, 이전에 있던 로컬을 모두 지우는것.
-    // if (is_ok) {
-    guess_store_handler(guess_data.value);
-    // } else {
-    //   storage.removeItem("guesses");
-    //   guess_store_handler(guess_data.value);
-    // }
+    // 순서, 추측한 단어, 유사도, 유사도 순위 순으로 저장
+    console.log(guess_data.value);
+    storage.setItem("guesses", JSON.stringify(guess_data.value));
+    console.log(storage.getItem("guesses"));
   }
 }
 
@@ -330,6 +320,11 @@ async function loadBasicInfo() {
   ans_number = obj_stats["ans_number"]; // 정답을 맞춘 총 횟수
   conti_ans_number = obj_stats["conti_ans_number"];
   giveup_number = obj_stats["giveup_number"];
+  if (sessionStorage.getItem("answering_top_row") !== null) {
+    answering_top_row.value = Boolean(
+      sessionStorage.getItem("answering_top_row")
+    );
+  }
 }
 
 // 포기하기
@@ -341,11 +336,9 @@ async function giveUp() {
       const url = "/giveup/" + puzzle_number;
       // 정답 단어 fetch
       const secret = await (await fetch(url)).text();
-      // console.log(secret);
-
       const tmp = {
         cnt: idx,
-        word: "[정답 단어가 들어가야 함]", // Q. 이상함 (정답을 줘야 하는데 html dom 트리를 줌..)
+        word: secret, // proxy...알아두길..
         similarity: 100,
         rank: "정답",
       };
