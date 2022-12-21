@@ -6,6 +6,14 @@
   <router-view />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const storage = window.localStorage;
+
+// 다크모드 유지
+let darkMode = storage.getItem("darkMode");
+if (darkMode === "true") {
+  document.body.classList.add("dark");
+}
+</script>
 
 <style></style>

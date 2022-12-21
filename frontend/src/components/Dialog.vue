@@ -121,12 +121,6 @@ function test_similarity_render() {
     storage.setItem("test_similarity", "false");
   }
 }
-
-// 다크모드 유지
-let darkMode = storage.getItem("darkMode");
-if (darkMode === "true") {
-  document.body.classList.add("dark");
-}
 </script>
 
 <style scoped>

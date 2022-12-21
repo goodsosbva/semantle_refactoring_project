@@ -25,6 +25,7 @@
       :stats="(stats as StatsInterface)"
     ></Result>
     <AnswerListTable
+      v-if="guess_data.length > 0"
       :last_word="last_word"
       :last_word_index="last_word_index"
       :guess_data="guess_data"
@@ -126,9 +127,10 @@ function saveStats() {
 }
 
 function initStats() {
-  if (stats.value === null) {
+  const loacal_storage_stats = loadStats();
+  if (stats.value === null || loacal_storage_stats === null) {
     stats.value = {
-      abandons: 0,
+      abandons: 0, // 클리어하지 않고 버린 게임
       firstPlay: puzzle_number,
       giveups: 0,
       lastEnd: puzzle_number - 1,
@@ -141,7 +143,14 @@ function initStats() {
     };
     saveStats();
   } else {
+    console.log("초기화 else", stats.value);
     if (stats.value["lastPlay"] !== puzzle_number) {
+      // 다른 날짜일때 사라져야할 변수 및 상황 정리
+      is_game_ended.value = false;
+      storage.removeItem("winState");
+      storage.removeItem("guesses");
+      storage.removeItem("today_guess_count_until_ended");
+
       const on_streak = stats.value["lastPlay"] === puzzle_number - 1;
       if (on_streak) {
         stats.value["playStreak"] += 1;
@@ -279,14 +288,14 @@ async function loadBasicInfo() {
     last_similarity_story.value = similarityStory;
   }
 
+  // 처음 게임한 stats 값 초기화용
+  initStats();
+
   // 로컬에서 데이터 꺼내오기 (초기화)
   const guesses_obj = JSON.parse(storage.getItem("guesses") as string); //
   if (guesses_obj !== null) {
     guess_data.value = guesses_obj;
   }
-
-  // 처음 게임한 stats 값 초기화용
-  initStats();
 
   const loaded_today_guess_count_until_ended = storage.getItem(
     "today_guess_count_until_ended"
@@ -308,7 +317,7 @@ async function loadBasicInfo() {
     is_game_ended.value = true;
     is_gave_up.value = true;
   } else {
-    storage.getItem("winState", "-1");
+    storage.getItem("winState");
   }
 }
 
@@ -318,4 +327,3 @@ onMounted(async () => {
 </script>
 
 <style scoped></style>
-

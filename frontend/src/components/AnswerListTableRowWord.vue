@@ -1,7 +1,7 @@
 <template>
   <tr v-if="word !== null">
     <td>{{ word.cnt }}</td>
-    <td :class="{ is_highlighted: 'highlight' }">{{ word.word }}</td>
+    <td :class="{ highlight: is_highlighted === true }">{{ word.word }}</td>
     <td>{{ word.similarity.toFixed(2) }}</td>
     <td v-if="shouldShowBarGraph(word)">
       <BarGraph :value="Number.parseFloat(word.rank)" />
@@ -24,3 +24,9 @@ function shouldShowBarGraph(word: GuessItemInterface) {
 }
 </script>
 
+<style setup>
+.highlight {
+  color: rgb(19, 92, 201);
+  font-weight: bold;
+}
+</style>

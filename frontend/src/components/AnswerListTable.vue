@@ -81,9 +81,4 @@ const guess_data_to_display = computed(() => {
 .line {
   height: 1px;
 }
-.highlight {
-  color: rgb(19, 92, 201);
-  font-weight: bold;
-}
 </style>
-

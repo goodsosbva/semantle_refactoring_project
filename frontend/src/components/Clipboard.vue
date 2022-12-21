@@ -9,6 +9,7 @@
         puzzle_number +
         '번째 꼬맨틀을 풀었습니다!\n' +
         result_time_sentance +
+        result_similarity_sentance +
         ' https://semantle-ko.newsjel.ly/'
       "
     />
@@ -34,26 +35,31 @@ const stats = storage.getItem("stats");
 const stats_obj = JSON.parse(stats as string);
 
 // 추측 횟수 표시 관련
-const result_time = stats_obj["today_chel_number"];
-const test_time = storage.getItem("test_time");
-let result_time_sentance = ref<string>("");
-if (test_time === "true") {
-  result_time_sentance.value = "추측 횟수: " + result_time + "\n";
+const test_time = stats_obj["totalGuesses"];
+const result_time_sentance = ref<string>("");
+if (test_time !== null) {
+  result_time_sentance.value = "추측 횟수: " + test_time + "\n";
 }
 
 // 최대 유사도 관련
-function get_top_similarity(data: any) {
-  let maxData = -1;
-  console.log(data);
+function get_top_similarity(data: GuessItemInterface[]) {
+  const tmp = [];
   for (let i = 0; i < data.length; i++) {
-    if (data.similarity > maxData) {
-      maxData = data.similarity;
-    }
+    tmp.push(data[i].similarity);
   }
-  return maxData;
+  tmp.sort(function (a: any, b: any) {
+    return b - a;
+  });
+  return tmp[1].toFixed(2);
 }
 const top_similarity_sort = get_top_similarity(props.guess_data);
-console.log(top_similarity_sort);
+const result_similarity_sentance = ref<string>("");
+if (test_time !== null) {
+  result_similarity_sentance.value =
+    "최대 유사도: " + top_similarity_sort + "\n";
+}
+
+// 시간 관련
 
 // 클립보드 복사
 const handleCopyForIE = () => {
@@ -90,6 +96,5 @@ const handleCopy = () => {
 }
 .button {
   padding: 9px;
-  margin-bottom: -15px;
 }
 </style>
