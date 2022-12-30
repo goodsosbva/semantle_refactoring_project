@@ -1,6 +1,9 @@
 <template>
   <!-- 설정 톱니바퀴 TODO -->
-  <nav id="menu">
+
+  <!-- <div :class="{ 'dialog-underlay': diplay_toggle === true }"></div> -->
+
+  <nav id="menu" class="white-bg">
     <button
       aria-label="Settings"
       class="overlay-button"
@@ -25,22 +28,50 @@
     </button>
   </nav>
   <!-- 설정 부분 TODO -->
-  <Dialog v-if="diplay_toggle" @close_value="click_close"></Dialog>
+  <Dialog
+    v-if="diplay_toggle"
+    @close_value="click_close"
+    @test_time_result_render="test_time_result_render_deliver"
+    @test_timer_result_render="test_timer_result_render_deliver"
+    @test_similarity_render="test_similarity_render_deliver"
+  ></Dialog>
 </template>
-
+<!-- @test_time_result_render="test_time_result_render"
+@test_timer_result_render="test_timer_result_render" -->
 <script setup lang="ts">
 import { ref } from "vue";
 import Dialog from "./Dialog.vue";
 
 const diplay_toggle = ref<boolean>(false);
 
+const emit = defineEmits<{
+  (e: "close_value", display_toggle: boolean): boolean;
+  (e: "test_time_result_render", test_time_result_render: boolean): boolean;
+  (e: "test_timer_result_render", test_timer_result_render: boolean): boolean;
+  (e: "test_similarity_render", test_similarity_render: boolean): boolean;
+  (e: "diplay_toggle_value", diplay_toggle: boolean): boolean;
+}>();
+
 function click_deliver() {
-  console.log("clked option!");
   diplay_toggle.value = !diplay_toggle.value;
 }
 
 function click_close(close_value: any) {
-  console.log("click_close!!!!");
+  console.log(close_value);
   diplay_toggle.value = close_value;
 }
+
+function test_time_result_render_deliver(test_time_result_render: any) {
+  emit("test_time_result_render", test_time_result_render);
+}
+
+function test_timer_result_render_deliver(test_timer_result_render: any) {
+  emit("test_timer_result_render", test_timer_result_render);
+}
+
+function test_similarity_render_deliver(test_similarity_render: any) {
+  emit("test_similarity_render", test_similarity_render);
+}
 </script>
+
+<style scoped></style>

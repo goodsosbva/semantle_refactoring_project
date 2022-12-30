@@ -1,10 +1,15 @@
 import type { GuessItemInterface } from "@/interface";
 
-export const duplicateChk = (datas: GuessItemInterface[], cur_data: string) => {
-  for (let i = 0; i < datas.length; i++) {
-    if (datas[i].word === cur_data) return true;
+export const findGuess = (
+  guess_item_list: GuessItemInterface[],
+  word: string
+) => {
+  for (let i = 0; i < guess_item_list.length; i++) {
+    if (guess_item_list[i].word === word)
+      return {
+        index: i,
+        guess_item: guess_item_list[i],
+      };
   }
-
-  return false;
+  return null;
 };
-

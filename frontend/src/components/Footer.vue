@@ -113,7 +113,7 @@
       </li>
       <!-- link 부분 -->
       <span id="yesterday-nearest1k"
-        ><router-link to="/nearest1k" :puzzle_number="puzzle_number"
+        ><router-link to="/nearest1k"
           >유사도 기준 상위 1000개의 단어</router-link
         >를 확인할 수 있습니다.</span
       >

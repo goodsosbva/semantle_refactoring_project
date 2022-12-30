@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Words from "../views/Words.vue";
 import Home from "../views/Home.vue";
+import TodayWords from "../views/TodayWords.vue";
 
 const routes = [
   {
@@ -12,8 +13,11 @@ const routes = [
     path: "/nearest1k",
     name: "nearest1k",
     component: Words,
-    // 바꾼곳
-    props: true,
+  },
+  {
+    path: "/nearest1kNow",
+    name: "nearest1kNow",
+    component: TodayWords,
   },
 ];
 

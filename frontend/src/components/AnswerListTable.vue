@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 
 import type { GuessItemInterface, SortTargetInterface } from "../interface";
 
@@ -56,6 +56,9 @@ function updateSort(clicked_target: SortTargetInterface) {
 }
 
 const sorted_guess_data = computed(() => {
+  // const filterd_guess_data = props.guess_data.filter(
+  //   (data) =>
+  //   data.word !== props.last_word?.word)
   if (sort_target.value === "number") {
     return number_sort(sort_reversed.value, props.guess_data);
   } else if (sort_target.value === "word") {
@@ -71,7 +74,7 @@ const guess_data_to_display = computed(() => {
     return sorted_guess_data.value;
   } else {
     return sorted_guess_data.value.filter(
-      (data) => data.cnt !== props.last_word_index
+      (data, _) => data.word !== props.last_word?.word
     );
   }
 });

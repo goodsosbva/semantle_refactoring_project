@@ -47,6 +47,7 @@ export async function submitGuess(
 // /nearest1k-data/<int:day>
 export async function nearest1k_data(puzzle_number: number): Promise<any> {
   const url = "/nearest1k-data/" + puzzle_number;
+  console.log(url);
   const response = await fetch(url);
   try {
     return await response.json();

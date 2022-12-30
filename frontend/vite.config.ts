@@ -14,22 +14,25 @@ export default defineConfig({
   server: {
     proxy: {
       "/guess": {
-        target: "https://semantle-ko.newsjel.ly/",
+        target: "http://localhost:8899/",
         changeOrigin: true,
       },
       "/yesterday": {
-        target: "https://semantle-ko.newsjel.ly/",
+        target: "http://localhost:8899/",
         changeOrigin: true,
       },
       "/similarity": {
-        target: "https://semantle-ko.newsjel.ly/",
+        target: "http://localhost:8899/",
         changeOrigin: true,
       },
       "/giveup": {
-        target: "https://semantle-ko.newsjel.ly/",
+        target: "http://localhost:8899/",
+        changeOrigin: true,
+      },
+      "/nearest1k-data": {
+        target: "http://localhost:8899/",
         changeOrigin: true,
       },
     },
   },
 });
-

@@ -3,7 +3,9 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/words">About</router-link> |
   </div> -->
-  <router-view />
+  <div>
+    <router-view />
+  </div>
 </template>
 
 <script setup lang="ts">

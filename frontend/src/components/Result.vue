@@ -1,25 +1,27 @@
 <template>
   <div id="response" class="gaveup">
     <p>
-      <b
-        >정답 단어를 맞추었습니다. {{ today_guess_count_until_ended }}번째
-        추측만에 정답을 맞췄네요!</b
+      <b>{{ preface }}</b
       ><br />정답 단어와 비슷한,
-      <a href="/nearest1k/256">상위 1000개의 단어</a>를 확인해보세요.
+      <!-- link 부분 -->
+      <span id="yesterday-nearest1k"
+        ><router-link to="/nearest1kNow">상위 1000개의 단어</router-link>를
+        확인해보세요.</span
+      >
     </p>
+
     <!-- Trigger -->
     <Clip
       id="clip"
       :puzzle_number="puzzle_number"
       :guess_data="guess_data"
+      :is_gave_up="is_gave_up"
+      :test_time_result_render_toggle="test_time_result_render_toggle"
+      :test_timer_result_render_toggle="test_timer_result_render_toggle"
+      :test_similarity_render_toggle="test_similarity_render_toggle"
+      @click="check_event_value()"
     ></Clip>
-    <!-- <input
-      type="button"
-      value="기록 복사하기"
-      id="result"
-      @click="clipCopy()"
-      class="button"
-    /> -->
+
     <br />
     {{ puzzle_number }}번째 꼬맨틀은 오늘 밤 자정(한국 시간 기준)에 열립니다.<br />
     <br />
@@ -58,6 +60,7 @@
 <script setup lang="ts">
 import Clip from "./Clipboard.vue";
 import type { GuessItemInterface, StatsInterface } from "../interface";
+import { onMounted, ref } from "vue";
 
 // 클립보드 관련
 const props = defineProps<{
@@ -65,7 +68,33 @@ const props = defineProps<{
   today_guess_count_until_ended: number;
   guess_data: GuessItemInterface[];
   stats: StatsInterface;
+  is_gave_up: boolean;
+  test_time_result_render_toggle: boolean;
+  test_timer_result_render_toggle: boolean;
+  test_similarity_render_toggle: boolean;
 }>();
+
+const preface = ref<string>("");
+
+function prefaceCaseUpdate() {
+  // 이긴 경우
+  if (props.is_gave_up === false) {
+    preface.value = `정답 단어를 맞추었습니다. ${props.today_guess_count_until_ended}번째
+        추측만에 정답을 맞췄네요!`;
+
+    // 단어가 1개 이상인 경우
+  } else {
+    preface.value = `저런… ${props.puzzle_number}번째 꼬맨틀을 포기했어요..ㅠ`;
+  }
+}
+
+function check_event_value() {
+  console.log(props.test_time_result_render_toggle);
+}
+
+onMounted(() => {
+  prefaceCaseUpdate();
+});
 </script>
 
 <style scoped>
@@ -74,4 +103,3 @@ const props = defineProps<{
   margin-bottom: -15px;
 }
 </style>
-
