@@ -117,16 +117,6 @@
           >유사도 기준 상위 1000개의 단어</router-link
         >를 확인할 수 있습니다.</span
       >
-
-      <!-- old -->
-      <!-- <li>
-        <span id="yesterday-nearest1k"
-          >정답 단어와 비슷한,
-          <a :href="'/nearest1k/' + puzzle_number"
-            >유사도 기준 상위 1000개의 단어</a
-          >를 확인할 수 있습니다.</span
-        >
-      </li> -->
     </ul>
 
     <p><b>Q. 플레이 기록을 볼 수 있나요?</b></p>
@@ -198,14 +188,8 @@
 </template>
 
 <script setup lang="ts">
-import Toggle from "./Toggle.vue";
-
 const props = defineProps<{
   puzzle_number: number;
   yesterday_keyword: string;
 }>();
-
-const q1 = "Q. 꼬맨틀은 무엇인가요?";
-const a1 =
-  "꼬맨틀은 오늘의 단어를 맞추는 게임입니다. 정답 단어를 추측하면, 추측한단어가 정답 단어와 얼마나 유사한지 유사도 점수로 알려줍니다. 가장 유사한단어의 유사도와 가까운 단어를 추측하면서, 정답 단어를 맞춰보세요.";
 </script>

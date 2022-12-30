@@ -127,10 +127,6 @@ if (dark_value === "true") {
   dark_box.value.pop();
 }
 
-function onScroll() {
-  console.log("zz");
-}
-
 function receive_closer() {
   emit("close_value", false);
 }

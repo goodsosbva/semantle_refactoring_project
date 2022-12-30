@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- value="이럴 수가! 첫번째 추측에서 260번째 꼬맨틀 정답 단어를 맞췄습니다!
-            https://semantle-ko.newsjel.ly/" -->
     <input
       ref="inputEl"
       type="hidden"
@@ -17,15 +15,6 @@
     <button @click="handleCopy" class="button">기록 복사하기</button>
   </div>
 </template>
-
-<!-- "post.title + ' by ' + post.author.name" -->
-<!-- test_time_result_render_toggle
-          ? result_time_sentance
-          : '' + test_timer_result_render_toggle
-          ? timeInfo
-          : '' + test_similarity_render_toggle
-          ? result_similarity_sentance
-          : '' + -->
 
 <script setup lang="ts">
 import { onMounted, ref, nextTick } from "vue";

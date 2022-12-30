@@ -1,8 +1,5 @@
 <template>
   <!-- 설정 톱니바퀴 TODO -->
-
-  <!-- <div :class="{ 'dialog-underlay': diplay_toggle === true }"></div> -->
-
   <nav id="menu" class="white-bg">
     <button
       aria-label="Settings"
@@ -36,8 +33,7 @@
     @test_similarity_render="test_similarity_render_deliver"
   ></Dialog>
 </template>
-<!-- @test_time_result_render="test_time_result_render"
-@test_timer_result_render="test_timer_result_render" -->
+
 <script setup lang="ts">
 import { ref } from "vue";
 import Dialog from "./Dialog.vue";

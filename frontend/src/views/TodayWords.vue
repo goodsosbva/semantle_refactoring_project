@@ -5,7 +5,7 @@
     @click="display_answer()"
   >
     <div style="border: thin solid black; background-color: #ffdddd">
-      조심하세요! 이 경고문을 클릭하면 <span id="spoiler"></span>의 정답이
+      조심하세요! 이 경고문을 클릭하면 <span id="spoiler">오늘</span>의 정답이
       표시됩니다.
     </div>
   </div>

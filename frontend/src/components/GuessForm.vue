@@ -41,9 +41,7 @@ const emit = defineEmits<{
 const input_word = ref<string>("");
 
 function clicked_input() {
-  console.log("clicked_input!");
   emit("guess", input_word.value);
   input_word.value = "";
 }
 </script>
-
