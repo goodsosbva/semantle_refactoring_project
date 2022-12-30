@@ -7,7 +7,7 @@
           id="dummy"
           style="position: absolute; width: 0; height: 0; opacity: 0"
         />
-        <!-- 입력 위치 -->
+        <!-- TODO: guess가 두번 입력되는 문제 수정 필요 -->
         <input
           placeholder="추측할 단어를 입력하세요"
           autocorrect="off"
@@ -45,3 +45,4 @@ function clicked_input() {
   input_word.value = "";
 }
 </script>
+

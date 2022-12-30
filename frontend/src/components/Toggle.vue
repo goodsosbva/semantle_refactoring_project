@@ -31,12 +31,8 @@ const props = defineProps<{
   answer: string;
 }>();
 
-console.log(props.question);
-
 function toggle_func() {
-  console.log("toggle!!");
   toggle.value = !toggle.value;
-  console.log(toggle.value);
 }
 </script>
 
@@ -48,3 +44,4 @@ function toggle_func() {
   margin-bottom: 10px;
 }
 </style>
+

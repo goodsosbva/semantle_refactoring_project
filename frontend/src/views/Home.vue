@@ -1,27 +1,18 @@
 <template>
-  <div :class="{ 'overflow-hidden': background_overflow_hidden === true }">
+  <div>
     <Banner></Banner>
     <div class="container">
       <header>
         <h2>꼬맨틀 - 단어 유사도 추측 게임</h2>
-        <!-- 설정 -->
         <Menu
-          @test_time_result_render="test_time_result_render_deliver"
-          @test_timer_result_render="test_timer_result_render_deliver"
-          @test_similarity_render="test_similarity_render_deliver"
-          @diplay_toggle_value="display_toggle_deliver"
+          v-model:is_dark="is_dark"
+          v-model:is_display_count="is_display_count"
+          v-model:is_display_time="is_display_time"
+          v-model:is_display_similarity="is_display_similarity"
         ></Menu>
       </header>
-      <!-- 작업!TODO -->
-      <SimilarityStory
-        v-if="last_similarity_story !== null"
-        :puzzle_number="puzzle_number"
-        :similarity_story="last_similarity_story"
-      ></SimilarityStory>
-      <!-- 오류 위치 태그 -->
+      <SimilarityStory :puzzle_number="puzzle_number"></SimilarityStory>
       <Error :error_text="error_text"></Error>
-
-      <!-- 꼬멘틀 추측 -->
       <GuessForm @guess="guessHandler"></GuessForm>
       <Result
         v-if="is_game_ended"
@@ -30,9 +21,9 @@
         :today_guess_count_until_ended="today_guess_count_until_ended"
         :stats="(stats as StatsInterface)"
         :is_gave_up="is_gave_up"
-        :test_time_result_render_toggle="test_time_result_render_toggle"
-        :test_timer_result_render_toggle="test_timer_result_render_toggle"
-        :test_similarity_render_toggle="test_similarity_render_toggle"
+        :is_display_count="is_display_count"
+        :is_display_time="is_display_time"
+        :is_display_similarity="is_display_similarity"
       ></Result>
       <AnswerListTable
         v-if="guess_data.length > 0"
@@ -40,7 +31,6 @@
         :last_word_index="last_word_index"
         :guess_data="guess_data"
       ></AnswerListTable>
-
       <input
         type="button"
         value="포기하기"
@@ -58,11 +48,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
-import { getSimilarityStory, getYesterday, submitGuess } from "../api";
+import { getYesterday, giveUp as giveUpApi, submitGuess } from "../api";
 import type {
-  SimilarityStoryInterface,
   GuessResultInterface,
   GuessErrorInterface,
   GuessCacheInterface,
@@ -78,27 +67,21 @@ import GuessForm from "../components/GuessForm.vue";
 import Footer from "../components/Footer.vue";
 import Result from "../components/Result.vue";
 import AnswerListTable from "../components/AnswerListTable.vue";
-// 중복 체크 함수
-import { findGuess } from "../functions/dupchk";
+import { findGuess, todayPuzzleNumber } from "../functions/util";
 
-const num_puzzle = 4650;
-const initial_date = new Date("2022-04-01T00:00:00+09:00");
-const puzzle_number =
-  Math.floor((new Date().getTime() - initial_date.getTime()) / 86400000) %
-  num_puzzle;
+const puzzle_number = todayPuzzleNumber();
 
 const yesterday_keyword = ref<string>("");
-const last_similarity_story = ref<SimilarityStoryInterface | null>(null);
 const error_text = ref<string>("");
 
-// 이제 까지 입력했던 값들 데이터 저장용.
+// 이제까지 입력했던 값들 데이터 저장용
 const cache: GuessCacheInterface = {};
 const storage = window.localStorage;
 
 // 데이터 저장용
 const guess_data = ref<GuessItemInterface[]>([]);
 
-// 가장 마지막에 온놈 관련 변수.
+// 가장 마지막 추측 관련 변수
 const last_word = ref<GuessItemInterface | null>(null);
 const last_word_index = ref<number | null>(null);
 
@@ -106,18 +89,12 @@ const is_game_ended = ref<boolean>(false);
 const is_gave_up = ref<boolean>(false);
 const today_guess_count_until_ended = ref<number>(0);
 
-const stats = ref<StatsInterface | null>(null);
+const is_dark = ref<boolean>(false);
+const is_display_count = ref<boolean>(true);
+const is_display_time = ref<boolean>(true);
+const is_display_similarity = ref<boolean>(true);
 
-const background_overflow_hidden = ref<boolean>(false);
-// 설정 토글관련...작업ing
-function display_toggle_deliver(close_value: any) {
-  console.log(close_value);
-  if (close_value) {
-    background_overflow_hidden.value = true;
-  } else {
-    background_overflow_hidden.value = false;
-  }
-}
+const stats = ref<StatsInterface | null>(null);
 
 async function cachedSubmitGuess(
   puzzle_number: number,
@@ -171,7 +148,6 @@ function initStats() {
     };
     saveStats();
   } else {
-    console.log("초기화 else", stats.value);
     if (stats.value["lastPlay"] !== puzzle_number) {
       // 다른 날짜일때 사라져야할 변수 및 상황 정리
       is_game_ended.value = false;
@@ -274,9 +250,6 @@ async function guessHandler(word: string) {
         saveStats();
       }
     }
-
-    // 로컬 저장소 저장 작업 시작!!
-    // 순서, 추측한 단어, 유사도, 유사도 순위 순으로 저장
     storage.setItem("guesses", JSON.stringify(guess_data.value));
   }
 }
@@ -285,12 +258,11 @@ async function guessHandler(word: string) {
 async function giveUp() {
   if (!is_game_ended.value) {
     if (confirm("정말로 포기하시겠습니까?")) {
-      const url = "/giveup/" + puzzle_number;
       // 정답 단어 fetch
-      const secret = await (await fetch(url)).text();
+      const secret = await giveUpApi(puzzle_number);
       const guess_item = {
         cnt: guess_data.value.length + 1,
-        word: secret, // proxy...알아두길..
+        word: secret,
         similarity: 100,
         rank: "정답",
       } as GuessItemInterface;
@@ -319,36 +291,47 @@ async function giveUp() {
   }
 }
 
-// 상태관리 배우면 고쳐야하는 부분
-const test_time_result_render_toggle = ref<boolean>(false);
-const test_similarity_render_toggle = ref<boolean>(false);
-const test_timer_result_render_toggle = ref<boolean>(false);
-
-// emit 전송용 함수
-function test_time_result_render_deliver(test_time_result_render: boolean) {
-  test_time_result_render_toggle.value = test_time_result_render;
-  console.log(test_time_result_render_toggle.value);
-}
-
-function test_timer_result_render_deliver(test_timer_result_render: boolean) {
-  test_timer_result_render_toggle.value = test_timer_result_render;
-  console.log(test_timer_result_render_toggle.value);
-}
-
-function test_similarity_render_deliver(test_similarity_render: boolean) {
-  test_similarity_render_toggle.value = test_similarity_render;
-  console.log(test_similarity_render_toggle.value);
-}
+watch(is_dark, async (new_value) => {
+  if (new_value) {
+    storage.setItem("darkMode", "true");
+    document.body.classList.add("dark");
+  } else {
+    storage.setItem("darkMode", "false");
+    document.body.classList.remove("dark");
+  }
+});
+watch(is_display_count, async (new_value) => {
+  if (new_value) {
+    storage.setItem("shareGuesses", "true");
+  } else {
+    storage.setItem("shareGuesses", "false");
+  }
+});
+watch(is_display_time, async (new_value) => {
+  if (new_value) {
+    storage.setItem("shareTime", "true");
+  } else {
+    storage.setItem("shareTime", "false");
+  }
+});
+watch(is_display_similarity, async (new_value) => {
+  if (new_value) {
+    storage.setItem("shareTopGuess", "true");
+  } else {
+    storage.setItem("shareTopGuess", "false");
+  }
+});
 
 async function loadBasicInfo() {
+  // 설정값 불러오기
+  is_dark.value = storage.getItem("darkMode") === "true";
+  is_display_count.value = storage.getItem("shareGuesses") === "true";
+  is_display_time.value = storage.getItem("shareTime") === "true";
+  is_display_similarity.value = storage.getItem("shareTopGuess") === "true";
+
   const yesterday = await getYesterday(puzzle_number);
   if (yesterday !== null) {
     yesterday_keyword.value = yesterday;
-  }
-
-  const similarityStory = await getSimilarityStory(puzzle_number);
-  if (similarityStory !== null) {
-    last_similarity_story.value = similarityStory;
   }
 
   // 처음 게임한 stats 값 초기화용
@@ -389,22 +372,3 @@ onMounted(async () => {
 });
 </script>
 
-<style>
-body {
-  margin: 0;
-}
-div {
-  box-sizing: border-box;
-}
-.black-bg {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  padding: 20px;
-}
-
-.overflow-hidden {
-  overflow: hidden;
-}
-</style>

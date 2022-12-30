@@ -24,9 +24,9 @@ const props = defineProps<{
   puzzle_number: number;
   guess_data: GuessItemInterface[];
   is_gave_up: boolean;
-  test_time_result_render_toggle: boolean;
-  test_timer_result_render_toggle: boolean;
-  test_similarity_render_toggle: boolean;
+  is_display_count: boolean;
+  is_display_time: boolean;
+  is_display_similarity: boolean;
 }>();
 
 const storage = window.localStorage;
@@ -72,7 +72,6 @@ function get_top_similarity(data: GuessItemInterface[]) {
 }
 const top_similarity_sort = get_top_similarity(props.guess_data);
 const result_similarity_sentance = ref<string>("");
-console.log(top_similarity_sort);
 if (top_similarity_sort !== undefined) {
   result_similarity_sentance.value =
     "최대 유사도: " + top_similarity_sort + "\n";
@@ -132,22 +131,21 @@ const final_sentance2 = ref<string>("");
 const final_sentance3 = ref<string>("");
 
 const handleCopy = async () => {
-  if (props.test_time_result_render_toggle) {
+  if (props.is_display_count) {
     final_sentance1.value = result_time_sentance.value;
   } else {
     final_sentance1.value = "";
   }
-  if (props.test_timer_result_render_toggle) {
+  if (props.is_display_time) {
     final_sentance2.value = timeInfo;
   } else {
     final_sentance2.value = "";
   }
-  if (props.test_similarity_render_toggle) {
+  if (props.is_display_similarity) {
     final_sentance3.value = result_similarity_sentance.value;
   } else {
     final_sentance3.value = "";
   }
-  console.log("클립보드 토글 내용!!!", final_sentance1.value);
   await nextTick();
   if (inputEl.value === null) {
     return;
@@ -161,7 +159,6 @@ const handleCopy = async () => {
     .writeText(inputEl.value.value)
     .then(() => alert("클립보드가 복사되었습니다"))
     .catch((e) => {
-      console.log(e.message);
       handleCopyForIE();
     });
 };
@@ -176,3 +173,4 @@ onMounted(async () => {
   padding: 9px;
 }
 </style>
+

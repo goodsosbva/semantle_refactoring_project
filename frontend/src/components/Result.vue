@@ -5,22 +5,22 @@
       ><br />정답 단어와 비슷한,
       <!-- link 부분 -->
       <span id="yesterday-nearest1k"
-        ><router-link to="/nearest1kNow">상위 1000개의 단어</router-link>를
-        확인해보세요.</span
+        ><router-link :to="'/nearest1k/' + puzzle_number"
+          >상위 1000개의 단어</router-link
+        >를 확인해보세요.</span
       >
     </p>
 
     <!-- Trigger -->
-    <Clip
+    <Clipboard
       id="clip"
       :puzzle_number="puzzle_number"
       :guess_data="guess_data"
       :is_gave_up="is_gave_up"
-      :test_time_result_render_toggle="test_time_result_render_toggle"
-      :test_timer_result_render_toggle="test_timer_result_render_toggle"
-      :test_similarity_render_toggle="test_similarity_render_toggle"
-      @click="check_event_value()"
-    ></Clip>
+      :is_display_count="is_display_count"
+      :is_display_time="is_display_time"
+      :is_display_similarity="is_display_similarity"
+    ></Clipboard>
 
     <br />
     {{ puzzle_number }}번째 꼬맨틀은 오늘 밤 자정(한국 시간 기준)에 열립니다.<br />
@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts">
-import Clip from "./Clipboard.vue";
+import Clipboard from "./Clipboard.vue";
 import type { GuessItemInterface, StatsInterface } from "../interface";
 import { onMounted, ref } from "vue";
 
@@ -69,9 +69,9 @@ const props = defineProps<{
   guess_data: GuessItemInterface[];
   stats: StatsInterface;
   is_gave_up: boolean;
-  test_time_result_render_toggle: boolean;
-  test_timer_result_render_toggle: boolean;
-  test_similarity_render_toggle: boolean;
+  is_display_count: boolean;
+  is_display_time: boolean;
+  is_display_similarity: boolean;
 }>();
 
 const preface = ref<string>("");
@@ -88,10 +88,6 @@ function prefaceCaseUpdate() {
   }
 }
 
-function check_event_value() {
-  console.log(props.test_time_result_render_toggle);
-}
-
 onMounted(() => {
   prefaceCaseUpdate();
 });
@@ -103,3 +99,4 @@ onMounted(() => {
   margin-bottom: -15px;
 }
 </style>
+

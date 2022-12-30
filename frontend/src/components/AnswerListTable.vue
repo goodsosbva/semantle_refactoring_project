@@ -2,13 +2,11 @@
   <table id="guesses">
     <tbody>
       <AnswerListTableRowHeader @update_sort="updateSort" />
-      <!-- 가장 최근 입력! -->
       <AnswerListTableRowWord
         v-if="last_word !== null"
         :word="last_word"
         :is_highlighted="true"
       />
-      <!-- 밑 줄 -->
       <tr>
         <td colspan="4">
           <hr class="line" />
@@ -25,11 +23,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 
 import type { GuessItemInterface, SortTargetInterface } from "../interface";
 
-import { number_sort, word_sort, similarity_sort } from "../sorts";
+import { numberSort, wordSort, similaritySort } from "../functions/util";
 import AnswerListTableRowHeader from "./AnswerListTableRowHeader.vue";
 import AnswerListTableRowWord from "./AnswerListTableRowWord.vue";
 
@@ -56,15 +54,12 @@ function updateSort(clicked_target: SortTargetInterface) {
 }
 
 const sorted_guess_data = computed(() => {
-  // const filterd_guess_data = props.guess_data.filter(
-  //   (data) =>
-  //   data.word !== props.last_word?.word)
   if (sort_target.value === "number") {
-    return number_sort(sort_reversed.value, props.guess_data);
+    return numberSort(sort_reversed.value, props.guess_data);
   } else if (sort_target.value === "word") {
-    return word_sort(sort_reversed.value, props.guess_data);
+    return wordSort(sort_reversed.value, props.guess_data);
   } else if (sort_target.value === "similarity") {
-    return similarity_sort(sort_reversed.value, props.guess_data);
+    return similaritySort(sort_reversed.value, props.guess_data);
   }
   return props.guess_data;
 });
@@ -85,3 +80,4 @@ const guess_data_to_display = computed(() => {
   height: 1px;
 }
 </style>
+

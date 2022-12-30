@@ -1,11 +1,10 @@
 <template>
-  <!-- 설정 톱니바퀴 TODO -->
   <nav id="menu" class="white-bg">
     <button
       aria-label="Settings"
       class="overlay-button"
       id="settings-button"
-      @click="click_deliver()"
+      @click="is_show_dialog = !is_show_dialog"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -24,13 +23,19 @@
       </svg>
     </button>
   </nav>
-  <!-- 설정 부분 TODO -->
   <Dialog
-    v-if="diplay_toggle"
-    @close_value="click_close"
-    @test_time_result_render="test_time_result_render_deliver"
-    @test_timer_result_render="test_timer_result_render_deliver"
-    @test_similarity_render="test_similarity_render_deliver"
+    v-if="is_show_dialog"
+    @clicked_close="is_show_dialog = false"
+    :is_dark="is_dark"
+    :is_display_count="is_display_count"
+    :is_display_time="is_display_time"
+    :is_display_similarity="is_display_similarity"
+    @update:is_dark="(v) => emit('update:is_dark', v)"
+    @update:is_display_count="(v) => emit('update:is_display_count', v)"
+    @update:is_display_time="(v) => emit('update:is_display_time', v)"
+    @update:is_display_similarity="
+      (v) => emit('update:is_display_similarity', v)
+    "
   ></Dialog>
 </template>
 
@@ -38,36 +43,20 @@
 import { ref } from "vue";
 import Dialog from "./Dialog.vue";
 
-const diplay_toggle = ref<boolean>(false);
+const is_show_dialog = ref<boolean>(false);
 
-const emit = defineEmits<{
-  (e: "close_value", display_toggle: boolean): boolean;
-  (e: "test_time_result_render", test_time_result_render: boolean): boolean;
-  (e: "test_timer_result_render", test_timer_result_render: boolean): boolean;
-  (e: "test_similarity_render", test_similarity_render: boolean): boolean;
-  (e: "diplay_toggle_value", diplay_toggle: boolean): boolean;
+const props = defineProps<{
+  is_dark: boolean;
+  is_display_count: boolean;
+  is_display_time: boolean;
+  is_display_similarity: boolean;
 }>();
 
-function click_deliver() {
-  diplay_toggle.value = !diplay_toggle.value;
-}
-
-function click_close(close_value: any) {
-  console.log(close_value);
-  diplay_toggle.value = close_value;
-}
-
-function test_time_result_render_deliver(test_time_result_render: any) {
-  emit("test_time_result_render", test_time_result_render);
-}
-
-function test_timer_result_render_deliver(test_timer_result_render: any) {
-  emit("test_timer_result_render", test_timer_result_render);
-}
-
-function test_similarity_render_deliver(test_similarity_render: any) {
-  emit("test_similarity_render", test_similarity_render);
-}
+const emit = defineEmits<{
+  (e: "update:is_dark", is_dark: boolean): void;
+  (e: "update:is_display_count", is_display_count: boolean): void;
+  (e: "update:is_display_time", is_display_time: boolean): void;
+  (e: "update:is_display_similarity", is_display_similarity: boolean): void;
+}>();
 </script>
 
-<style scoped></style>

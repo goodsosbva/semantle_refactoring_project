@@ -1,5 +1,3 @@
-import GuessForm from "./components/GuessForm.vue";
-
 export interface SimilarityStoryInterface {
   top: number;
   top10: number;
@@ -24,6 +22,12 @@ export type SortTargetInterface = "number" | "word" | "similarity";
 
 export interface GuessItemInterface {
   cnt: number;
+  word: string;
+  similarity: number;
+  rank: string;
+}
+
+export interface NearestItemInterface {
   word: string;
   similarity: number;
   rank: string;

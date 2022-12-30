@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
-import Words from "../views/Words.vue";
 import Home from "../views/Home.vue";
-import TodayWords from "../views/TodayWords.vue";
+import Nearest from "../views/Nearest.vue";
 
+// TODO: 404 or fallback
 const routes = [
   {
     path: "/",
@@ -10,14 +10,10 @@ const routes = [
     component: Home,
   },
   {
-    path: "/nearest1k",
+    path: "/nearest1k/:puzzle_number_input",
     name: "nearest1k",
-    component: Words,
-  },
-  {
-    path: "/nearest1kNow",
-    name: "nearest1kNow",
-    component: TodayWords,
+    component: Nearest,
+    props: true,
   },
 ];
 
@@ -27,3 +23,4 @@ const router = createRouter({
 });
 
 export default router;
+
