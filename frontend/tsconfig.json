@@ -6,6 +6,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
+    // 스로틀 관련
+    "esModuleInterop": true
   },
 
   "references": [

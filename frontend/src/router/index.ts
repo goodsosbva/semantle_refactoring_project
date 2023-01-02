@@ -1,8 +1,9 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "../views/Home.vue";
 import Nearest from "../views/Nearest.vue";
+import page404 from "../views/page404.vue";
 
-// TODO: 404 or fallback
+// TODO: 404 or fallback check ready
 const routes = [
   {
     path: "/",
@@ -15,6 +16,7 @@ const routes = [
     component: Nearest,
     props: true,
   },
+  { path: "/:pathMatch(.*)*", component: page404 },
 ];
 
 const router = createRouter({
@@ -23,4 +25,3 @@ const router = createRouter({
 });
 
 export default router;
-
