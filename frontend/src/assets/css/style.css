@@ -203,11 +203,15 @@ input[type="button"] {
   width: 100%;
 }
 
+/* 인풋! - chk */
 #guess-wrapper #guess {
+  color: #333;
+  background-color: #fafafa;
   width: 100%;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
+/* chk */
 
 #guess-wrapper #guess-btn {
   color: black;
@@ -379,6 +383,12 @@ body.dark #guess-wrapper #guess-btn {
   color: #fafafa;
   background-color: #333;
 }
+/* chk */
+body.dark #guess-wrapper #guess {
+  color: #fafafa;
+  background-color: #333;
+}
+/* chk - 고친 부분 */
 
 body.dark #give-up-btn {
   color: #fafafa;
