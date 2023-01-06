@@ -74,7 +74,7 @@ const puzzle_number = todayPuzzleNumber();
 const yesterday_keyword = ref<string>("");
 const error_text = ref<string>("");
 
-// 이제까지 입력했던 값들 데이터 저장용 변수
+// 이제까지 입력했던 값들 데이터 저장용
 const cache: GuessCacheInterface = {};
 const storage = window.localStorage;
 
