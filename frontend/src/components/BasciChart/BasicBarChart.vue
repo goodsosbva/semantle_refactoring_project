@@ -16,7 +16,7 @@ const props = defineProps<{
   nearest_items: NearestItemInterface[];
 }>();
 
-const datatest = ref<any>({
+const datas = ref<any>({
   labels: [],
   datasets: [
     {
@@ -51,10 +51,19 @@ const options = ref<any>({
   },
 });
 
+const random_rgb = function () {
+  let r = Math.floor(Math.random() * 256);
+  let g = Math.floor(Math.random() * 256);
+  let b = Math.floor(Math.random() * 256);
+
+  let result = `rgba(${r}, ${g}, ${b}, 0.2)`;
+  return result;
+};
+
 function createChart() {
   new Chart(barChart.value, {
-    type: "doughnut",
-    data: datatest.value,
+    type: "line",
+    data: datas.value,
     options: options,
   });
 }
@@ -69,10 +78,12 @@ watch(
     let new_date = [];
     for (let i = 0; i < props.nearest_items.length; i++) {
       if (i === 10) break;
-      datatest.value.labels.push(props.nearest_items[i].word);
+      datas.value.labels.push(props.nearest_items[i].word);
+      const random_color = random_rgb();
+      datas.value.datasets[0].backgroundColor.push(random_color);
       new_date.push(props.nearest_items[i].similarity);
     }
-    datatest.value.datasets[0].data = new_date;
+    datas.value.datasets[0].data = new_date;
   }
 );
 
