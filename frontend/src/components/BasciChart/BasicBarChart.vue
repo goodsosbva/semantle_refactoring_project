@@ -10,13 +10,34 @@ import { Chart, registerables } from "chart.js";
 import { computed, onMounted, ref, watch } from "vue";
 Chart.register(...registerables);
 
-const barChart = ref<any>();
+const barChart = ref<HTMLCanvasElement>();
 
 const props = defineProps<{
   nearest_items: NearestItemInterface[];
 }>();
 
-const datas = ref<any>({
+interface ChartTypes {
+  labels: string[];
+  datasets: [
+    {
+      label: string;
+      data: number[];
+      backgroundColor: string[];
+      borderColor: string[];
+      borderWidth: number;
+    }
+  ];
+}
+
+interface OptionTypes {
+  scales: {
+    y: {
+      beginAtZero: boolean;
+    };
+  };
+}
+
+const datas = ref<ChartTypes>({
   labels: [],
   datasets: [
     {
@@ -43,7 +64,7 @@ const datas = ref<any>({
   ],
 });
 
-const options = ref<any>({
+const options = ref<OptionTypes>({
   scales: {
     y: {
       beginAtZero: true,
@@ -61,10 +82,10 @@ const random_rgb = function () {
 };
 
 function createChart() {
-  new Chart(barChart.value, {
-    type: "line",
+  new Chart(barChart.value as HTMLCanvasElement, {
+    type: "polarArea",
     data: datas.value,
-    options: options,
+    options: options.value,
   });
 }
 
