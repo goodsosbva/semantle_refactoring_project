@@ -6,6 +6,8 @@
         표시됩니다.
       </div>
     </div>
+    <BasicBarChart :nearest_items="nearest_items"></BasicBarChart>
+
     <div id="nearest" v-if="should_display_answer">
       꼬맨틀 <b id="day">#{{ puzzle_number }}</b
       >의 정답은 <b id="word">{{ keyword }}</b
@@ -30,7 +32,6 @@
     확인할 수 있습니다.
   </div>
   <router-link to="/">메인 페이지로 돌아가기</router-link>
-  <BasicBarChart :nearest_items="nearest_items"></BasicBarChart>
 </template>
 
 <script setup lang="ts">

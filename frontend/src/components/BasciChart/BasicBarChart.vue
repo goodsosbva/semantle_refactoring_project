@@ -16,12 +16,12 @@ const props = defineProps<{
   nearest_items: NearestItemInterface[];
 }>();
 
-const data = ref<any>({
-  labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+const datatest = ref<any>({
+  labels: [],
   datasets: [
     {
-      label: "# of Votes",
-      data: [12, 19, 3, 5, 2, 3],
+      label: "Top 10 유사도",
+      data: [],
       backgroundColor: [
         "rgba(255, 99, 132, 0.2)",
         "rgba(54, 162, 235, 0.2)",
@@ -53,20 +53,28 @@ const options = ref<any>({
 
 function createChart() {
   new Chart(barChart.value, {
-    type: "bar",
-    data: data.value,
+    type: "doughnut",
+    data: datatest.value,
     options: options,
   });
 }
 
 onMounted(() => {
-  console.log(props.nearest_items);
   createChart();
 });
 
-// array of multiple sources
-watch(props.nearest_items, (new_nearest_item) => {
-  console.log("watch!");
-  console.log(new_nearest_item);
-});
+watch(
+  () => props.nearest_items.length,
+  () => {
+    let new_date = [];
+    for (let i = 0; i < props.nearest_items.length; i++) {
+      if (i === 10) break;
+      datatest.value.labels.push(props.nearest_items[i].word);
+      new_date.push(props.nearest_items[i].similarity);
+    }
+    datatest.value.datasets[0].data = new_date;
+  }
+);
+
+const nearest_top10_push = computed(() => {});
 </script>
