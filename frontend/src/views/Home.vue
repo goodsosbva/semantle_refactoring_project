@@ -325,6 +325,15 @@ watch(is_display_similarity, async (new_value) => {
 async function loadBasicInfo() {
   // 설정값 불러오기
   is_dark.value = storage.getItem("darkMode") === "true";
+  // 초기 설정값 true로 바꿔주는 코드
+  if (storage.getItem("init") === null) {
+    storage.setItem("init", "init_complete");
+
+    storage.setItem("shareGuesses", "true");
+    storage.setItem("shareTime", "true");
+    storage.setItem("shareTopGuess", "true");
+  }
+
   is_display_count.value = storage.getItem("shareGuesses") === "true";
   is_display_time.value = storage.getItem("shareTime") === "true";
   is_display_similarity.value = storage.getItem("shareTopGuess") === "true";

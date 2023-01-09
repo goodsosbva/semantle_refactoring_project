@@ -109,6 +109,8 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+
 const props = defineProps<{
   is_dark: boolean;
   is_display_count: boolean;
@@ -123,5 +125,8 @@ const emit = defineEmits<{
   (e: "update:is_display_time", is_display_time: boolean): void;
   (e: "update:is_display_similarity", is_display_similarity: boolean): void;
 }>();
-</script>
 
+onMounted(() => {
+  console.log(props.is_display_count);
+});
+</script>

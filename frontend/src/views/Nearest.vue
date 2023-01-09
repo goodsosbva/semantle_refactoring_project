@@ -30,6 +30,7 @@
     확인할 수 있습니다.
   </div>
   <router-link to="/">메인 페이지로 돌아가기</router-link>
+  <BasicBarChart></BasicBarChart>
 </template>
 
 <script setup lang="ts">
@@ -37,6 +38,7 @@ import { nearest1kData, giveUp } from "../api";
 import { computed, onMounted, ref } from "vue";
 import type { NearestItemInterface } from "@/interface";
 import { todayPuzzleNumber } from "@/functions/util";
+import BasicBarChart from "../components/BasciChart/BasicBarChart.vue";
 
 const nearest_items = ref<NearestItemInterface[]>([]);
 const keyword = ref<string>("");
@@ -69,4 +71,3 @@ onMounted(async () => {
   }
 });
 </script>
-
