@@ -30,7 +30,7 @@ export default defineConfig({
         changeOrigin: true,
       },
       "/nearest1k-data": {
-        target: "https://semantle-ko.newsjel.ly/",
+        target: "http://localhost:8899/",
         changeOrigin: true,
       },
     },

@@ -30,7 +30,7 @@
     확인할 수 있습니다.
   </div>
   <router-link to="/">메인 페이지로 돌아가기</router-link>
-  <BasicBarChart></BasicBarChart>
+  <BasicBarChart :nearest_items="nearest_items"></BasicBarChart>
 </template>
 
 <script setup lang="ts">
