@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import type { GuessItemInterface, NearestItemInterface } from "@/interface";
 import { Chart, registerables } from "chart.js";
+import { max } from "lodash";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 Chart.register(...registerables);
 
@@ -14,6 +15,7 @@ const barChart = ref<HTMLCanvasElement | null>(null);
 const init = ref<boolean>(false);
 const flash = ref<boolean>(true);
 const max_value = ref<number | null>(null);
+const max_labels = ref<string[]>([]);
 
 const props = defineProps<{
   guess_data: GuessItemInterface[];
@@ -37,6 +39,13 @@ interface OptionTypes {
   scales: {
     y: {
       beginAtZero: boolean;
+    };
+  };
+  plugins: {
+    tooltip: {
+      callbacks: {
+        title: (context: []) => string | string[] | undefined;
+      };
     };
   };
 }
@@ -68,6 +77,18 @@ const options = shallowRef<OptionTypes>({
       beginAtZero: true,
     },
   },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        title: function (context: []) {
+          if (context[0].datasetIndex === 0) {
+            return context[0].label;
+          }
+          return max_labels.value[context[0].dataIndex];
+        },
+      },
+    },
+  },
 });
 
 const myChart = shallowRef<Chart | null>(null);
@@ -92,26 +113,63 @@ function max_value_caculate(total_data: GuessItemInterface[]) {
   return max_value_candidate_obj;
 }
 
+function caculate_labels_and_value(
+  max_label: string | null,
+  max_value: number,
+  i: number
+) {
+  if (myChart.value !== null) {
+    myChart.value.data.labels?.push(props.guess_data[i].word);
+    myChart.value.data.datasets[0].data.push(props.guess_data[i].similarity);
+
+    if (max_label === null) {
+      max_label = props.guess_data[i].word;
+    }
+
+    if (max_value > props.guess_data[i].similarity) {
+      myChart.value.data.datasets[1].data.push(max_value);
+    } else {
+      max_value = props.guess_data[i].similarity;
+      myChart.value.data.datasets[1].data.push(max_value);
+      max_label = props.guess_data[i].word;
+    }
+    max_labels.value.push(max_label);
+  }
+  return { max_label: max_label, max_value: max_value };
+}
+
 watch(
   () => props.guess_data.length,
   () => {
     console.log("watch!", props.guess_data);
-    max_value.value = props.guess_data[0].similarity;
+    // max_value.value = props.guess_data[0].similarity;
+    let max_value = props.guess_data[0].similarity;
+    let max_label = null;
 
     if (init.value === false) {
       if (myChart.value !== null) {
         for (let i = 0; i < props.guess_data.length; i++) {
-          myChart.value.data.labels?.push(props.guess_data[i].word);
-          myChart.value.data.datasets[0].data.push(
-            props.guess_data[i].similarity
-          );
+          // i
+          const result = caculate_labels_and_value(max_label, max_value, i);
+          max_label = result.max_label;
+          max_value = result.max_value;
+          //   myChart.value.data.labels?.push(props.guess_data[i].word);
+          //   myChart.value.data.datasets[0].data.push(
+          //     props.guess_data[i].similarity
+          //   );
 
-          if (max_value.value > props.guess_data[i].similarity) {
-            myChart.value.data.datasets[1].data.push(max_value.value);
-          } else {
-            max_value.value = props.guess_data[i].similarity;
-            myChart.value.data.datasets[1].data.push(max_value.value);
-          }
+          //   if (max_label === null) {
+          //     max_label = props.guess_data[i].word;
+          //   }
+
+          //   if (max_value > props.guess_data[i].similarity) {
+          //     myChart.value.data.datasets[1].data.push(max_value);
+          //   } else {
+          //     max_value = props.guess_data[i].similarity;
+          //     myChart.value.data.datasets[1].data.push(max_value);
+          //     max_label = props.guess_data[i].word;
+          //   }
+          //   max_labels.value.push(max_label);
         }
         // debugger;
         myChart.value.update();
@@ -119,25 +177,36 @@ watch(
       }
     } else {
       if (myChart.value !== null) {
-        myChart.value.data.labels?.push(
-          props.guess_data[props.guess_data.length - 1].word
+        max_value = max_value_caculate(props.guess_data).similarity;
+
+        const result = caculate_labels_and_value(
+          max_label,
+          max_value,
+          props.guess_data.length - 1
         );
-        myChart.value.data.datasets[0].data.push(
-          props.guess_data[props.guess_data.length - 1].similarity
-        );
-        //
-        max_value.value = max_value_caculate(props.guess_data).similarity;
-        console.log(max_value.value);
-        if (
-          max_value.value >
-          props.guess_data[props.guess_data.length - 1].similarity
-        ) {
-          myChart.value.data.datasets[1].data.push(max_value.value);
-        } else {
-          max_value.value =
-            props.guess_data[props.guess_data.length - 1].similarity;
-          myChart.value.data.datasets[1].data.push(max_value.value);
-        }
+        max_label = result.max_label;
+        max_value = result.max_value;
+        // myChart.value.data.labels?.push(
+        //   props.guess_data[props.guess_data.length - 1].word
+        // );
+        // myChart.value.data.datasets[0].data.push(
+        //   props.guess_data[props.guess_data.length - 1].similarity
+        // );
+
+        // if (max_label === null) {
+        //   max_label = props.guess_data[props.guess_data.length - 1].word;
+        // }
+
+        // if (
+        //   max_value > props.guess_data[props.guess_data.length - 1].similarity
+        // ) {
+        //   myChart.value.data.datasets[1].data.push(max_value);
+        // } else {
+        //   max_value = props.guess_data[props.guess_data.length - 1].similarity;
+        //   myChart.value.data.datasets[1].data.push(max_value);
+        //   max_label = props.guess_data[props.guess_data.length - 1].word;
+        // }
+        // max_labels.value.push(max_label);
 
         myChart.value.update();
       }
@@ -164,23 +233,35 @@ onMounted(() => {
 
   console.log(props.is_graph_show);
   if (props.is_graph_show && props.guess_data.length !== 0) {
+    let max_value = props.guess_data[0].similarity;
+    let max_label = null;
+
     console.log(props.guess_data);
-    max_value.value = props.guess_data[0].similarity;
+    max_value = props.guess_data[0].similarity;
 
     if (init.value === false) {
       if (myChart.value !== null) {
         for (let i = 0; i < props.guess_data.length; i++) {
-          myChart.value.data.labels?.push(props.guess_data[i].word);
-          myChart.value.data.datasets[0].data.push(
-            props.guess_data[i].similarity
-          );
+          const result = caculate_labels_and_value(max_label, max_value, i);
+          max_label = result.max_label;
+          max_value = result.max_value;
+          // myChart.value.data.labels?.push(props.guess_data[i].word);
+          // myChart.value.data.datasets[0].data.push(
+          //   props.guess_data[i].similarity
+          // );
 
-          if (max_value.value > props.guess_data[i].similarity) {
-            myChart.value.data.datasets[1].data.push(max_value.value);
-          } else {
-            max_value.value = props.guess_data[i].similarity;
-            myChart.value.data.datasets[1].data.push(max_value.value);
-          }
+          // if (max_label === null) {
+          //   max_label = props.guess_data[i].word;
+          // }
+
+          // if (max_value > props.guess_data[i].similarity) {
+          //   myChart.value.data.datasets[1].data.push(max_value);
+          // } else {
+          //   max_value = props.guess_data[i].similarity;
+          //   myChart.value.data.datasets[1].data.push(max_value);
+          //   max_label = props.guess_data[i].word;
+          // }
+          // max_labels.value.push(max_label);
         }
         // debugger;
         myChart.value.update();
