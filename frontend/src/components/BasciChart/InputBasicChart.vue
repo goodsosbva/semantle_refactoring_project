@@ -145,7 +145,7 @@ watch(
   }
 );
 
-// Q. 되지만 질문해보자!
+// Q. 되지만
 // watch(
 //   () => props.is_graph_show,
 //   () => {
@@ -163,7 +163,7 @@ onMounted(() => {
   }
 
   console.log(props.is_graph_show);
-  if (props.is_graph_show) {
+  if (props.is_graph_show && props.guess_data.length !== 0) {
     console.log(props.guess_data);
     max_value.value = props.guess_data[0].similarity;
 
