@@ -30,12 +30,14 @@
     :is_display_count="is_display_count"
     :is_display_time="is_display_time"
     :is_display_similarity="is_display_similarity"
+    :is_graph_show="is_graph_show"
     @update:is_dark="(v) => emit('update:is_dark', v)"
     @update:is_display_count="(v) => emit('update:is_display_count', v)"
     @update:is_display_time="(v) => emit('update:is_display_time', v)"
     @update:is_display_similarity="
       (v) => emit('update:is_display_similarity', v)
     "
+    @update:is_graph_show="(v) => emit('update:is_graph_show', v)"
   ></Dialog>
 </template>
 
@@ -50,6 +52,7 @@ const props = defineProps<{
   is_display_count: boolean;
   is_display_time: boolean;
   is_display_similarity: boolean;
+  is_graph_show: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -57,6 +60,6 @@ const emit = defineEmits<{
   (e: "update:is_display_count", is_display_count: boolean): void;
   (e: "update:is_display_time", is_display_time: boolean): void;
   (e: "update:is_display_similarity", is_display_similarity: boolean): void;
+  (e: "update:is_graph_show", is_graph_show: boolean): void;
 }>();
 </script>
-

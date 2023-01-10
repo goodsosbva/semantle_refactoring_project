@@ -9,11 +9,19 @@
           v-model:is_display_count="is_display_count"
           v-model:is_display_time="is_display_time"
           v-model:is_display_similarity="is_display_similarity"
+          v-model:is_graph_show="is_graph_show"
         ></Menu>
       </header>
       <SimilarityStory :puzzle_number="puzzle_number"></SimilarityStory>
       <Error :error_text="error_text"></Error>
       <GuessForm @guess="guessHandler"></GuessForm>
+      <!-- chartjs -->
+      <div v-if="is_graph_show">
+        <InputBasicChartVue
+          :guess_data="guess_data"
+          :is_graph_show="is_graph_show"
+        ></InputBasicChartVue>
+      </div>
       <Result
         v-if="is_game_ended"
         :puzzle_number="puzzle_number"
@@ -31,8 +39,7 @@
         :last_word_index="last_word_index"
         :guess_data="guess_data"
       ></AnswerListTable>
-      <!-- chartjs -->
-      <InputBasicChartVue :guess_data="guess_data"></InputBasicChartVue>
+
       <input
         type="button"
         value="포기하기"
@@ -96,6 +103,7 @@ const is_dark = ref<boolean>(false);
 const is_display_count = ref<boolean>(true);
 const is_display_time = ref<boolean>(true);
 const is_display_similarity = ref<boolean>(true);
+const is_graph_show = ref<boolean>(true);
 
 const stats = ref<StatsInterface | null>(null);
 
@@ -325,6 +333,25 @@ watch(is_display_similarity, async (new_value) => {
   }
 });
 
+// chatjs 관련
+const init_graph_show = ref<boolean>(true);
+if (storage.getItem("showGraph") !== null) {
+  if (storage.getItem("showGraph") === "true") {
+    init_graph_show.value = true;
+  } else {
+    init_graph_show.value = false;
+  }
+  is_graph_show.value = init_graph_show.value;
+}
+watch(is_graph_show, async (new_value) => {
+  if (new_value) {
+    storage.setItem("showGraph", "true");
+  } else {
+    storage.setItem("showGraph", "false");
+  }
+  console.log(new_value);
+});
+
 async function loadBasicInfo() {
   // 설정값 불러오기
   is_dark.value = storage.getItem("darkMode") === "true";
@@ -381,5 +408,6 @@ async function loadBasicInfo() {
 
 onMounted(async () => {
   await loadBasicInfo();
+  console.log(is_graph_show.value);
 });
 </script>

@@ -102,6 +102,21 @@
               결과 공유 텍스트에 최대 유사도 표시하기</label
             >
           </div>
+          <div>
+            <input
+              type="checkbox"
+              name="share-graph"
+              id="share-graph"
+              @input="
+                emit(
+                  'update:is_graph_show',
+                  ($event.target as HTMLInputElement).checked
+                )
+              "
+              :checked="is_graph_show"
+            />
+            <label for="share-graph"> 유사도 그래프 표시하기</label>
+          </div>
         </div>
       </div>
     </div>
@@ -116,6 +131,7 @@ const props = defineProps<{
   is_display_count: boolean;
   is_display_time: boolean;
   is_display_similarity: boolean;
+  is_graph_show: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -124,9 +140,10 @@ const emit = defineEmits<{
   (e: "update:is_display_count", is_display_count: boolean): void;
   (e: "update:is_display_time", is_display_time: boolean): void;
   (e: "update:is_display_similarity", is_display_similarity: boolean): void;
+  (e: "update:is_graph_show", is_graph_show: boolean): void;
 }>();
 
 onMounted(() => {
-  console.log(props.is_display_count);
+  console.log(props.is_graph_show);
 });
 </script>

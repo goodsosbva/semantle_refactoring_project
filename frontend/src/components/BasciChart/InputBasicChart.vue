@@ -17,6 +17,7 @@ const max_value = ref<number | null>(null);
 
 const props = defineProps<{
   guess_data: GuessItemInterface[];
+  is_graph_show: boolean;
 }>();
 
 interface ChartTypes {
@@ -80,25 +81,21 @@ const random_rgb = function (): string {
   return result;
 };
 
-function show_graph() {
-  flash.value = !flash.value;
-}
-
 function max_value_caculate(total_data: GuessItemInterface[]) {
-  let max_value_candidate = -1;
+  let max_value_candidate_obj = total_data[0];
   for (let i = 0; i < total_data.length; i++) {
-    if (total_data[i].similarity > max_value_candidate) {
-      max_value_candidate = total_data[i].similarity;
+    if (total_data[i].similarity > max_value_candidate_obj.similarity) {
+      max_value_candidate_obj = total_data[i];
     }
   }
 
-  return max_value_candidate;
+  return max_value_candidate_obj;
 }
 
 watch(
   () => props.guess_data.length,
   () => {
-    console.log("watch!", props.guess_data[0]);
+    console.log("watch!", props.guess_data);
     max_value.value = props.guess_data[0].similarity;
 
     if (init.value === false) {
@@ -129,7 +126,7 @@ watch(
           props.guess_data[props.guess_data.length - 1].similarity
         );
         //
-        max_value.value = max_value_caculate(props.guess_data);
+        max_value.value = max_value_caculate(props.guess_data).similarity;
         console.log(max_value.value);
         if (
           max_value.value >
@@ -148,6 +145,14 @@ watch(
   }
 );
 
+// Q. 되지만 질문해보자!
+// watch(
+//   () => props.is_graph_show,
+//   () => {
+//     console.log("watch2!");
+//   }
+// );
+
 onMounted(() => {
   if (barChart.value !== null) {
     myChart.value = new Chart(barChart.value, {
@@ -155,6 +160,33 @@ onMounted(() => {
       data: datas.value.data,
       options: options.value,
     });
+  }
+
+  console.log(props.is_graph_show);
+  if (props.is_graph_show) {
+    console.log(props.guess_data);
+    max_value.value = props.guess_data[0].similarity;
+
+    if (init.value === false) {
+      if (myChart.value !== null) {
+        for (let i = 0; i < props.guess_data.length; i++) {
+          myChart.value.data.labels?.push(props.guess_data[i].word);
+          myChart.value.data.datasets[0].data.push(
+            props.guess_data[i].similarity
+          );
+
+          if (max_value.value > props.guess_data[i].similarity) {
+            myChart.value.data.datasets[1].data.push(max_value.value);
+          } else {
+            max_value.value = props.guess_data[i].similarity;
+            myChart.value.data.datasets[1].data.push(max_value.value);
+          }
+        }
+        // debugger;
+        myChart.value.update();
+        init.value = true;
+      }
+    }
   }
 });
 </script>
