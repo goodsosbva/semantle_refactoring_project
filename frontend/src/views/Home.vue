@@ -31,6 +31,8 @@
         :last_word_index="last_word_index"
         :guess_data="guess_data"
       ></AnswerListTable>
+      <!-- chartjs -->
+      <InputBasicChartVue :guess_data="guess_data"></InputBasicChartVue>
       <input
         type="button"
         value="포기하기"
@@ -68,6 +70,7 @@ import Footer from "../components/Footer.vue";
 import Result from "../components/Result.vue";
 import AnswerListTable from "../components/AnswerListTable.vue";
 import { findGuess, todayPuzzleNumber } from "../functions/util";
+import InputBasicChartVue from "@/components/BasciChart/InputBasicChart.vue";
 
 const puzzle_number = todayPuzzleNumber();
 
