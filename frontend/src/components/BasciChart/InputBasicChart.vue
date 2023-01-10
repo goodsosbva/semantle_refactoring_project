@@ -39,9 +39,44 @@ interface OptionTypes {
   };
 }
 
+const datas = shallowRef<ChartTypes>({
+  labels: [],
+  datasets: [
+    {
+      label: "Top 10 유사도",
+      data: [],
+      backgroundColor: [
+        "rgba(255, 99, 132, 0.2)",
+        "rgba(54, 162, 235, 0.2)",
+        "rgba(255, 206, 86, 0.2)",
+        "rgba(75, 192, 192, 0.2)",
+        "rgba(153, 102, 255, 0.2)",
+        "rgba(255, 159, 64, 0.2)",
+      ],
+      borderColor: [
+        "rgba(255, 99, 132, 1)",
+        "rgba(54, 162, 235, 1)",
+        "rgba(255, 206, 86, 1)",
+        "rgba(75, 192, 192, 1)",
+        "rgba(153, 102, 255, 1)",
+        "rgba(255, 159, 64, 1)",
+      ],
+      borderWidth: 1,
+    },
+  ],
+});
+
+const options = shallowRef<OptionTypes>({
+  scales: {
+    y: {
+      beginAtZero: true,
+    },
+  },
+});
+
 const myChart = shallowRef<Chart | null>(null);
 
-const random_rgb = function () {
+const random_rgb = function (): string {
   let r = Math.floor(Math.random() * 256);
   let g = Math.floor(Math.random() * 256);
   let b = Math.floor(Math.random() * 256);
@@ -71,7 +106,10 @@ watch(
           myChart.value.data.datasets[0].data.push(
             props.guess_data[i].similarity
           );
-          myChart.value.data.datasets[0].backgroundColor.push(random_rgb());
+          if (myChart.value.data.datasets[0].backgroundColor) {
+            const rgb = random_rgb();
+            myChart.value.data.datasets[0].backgroundColor.push(rgb);
+          }
         }
         // debugger;
         myChart.value.update();
@@ -85,7 +123,11 @@ watch(
         myChart.value.data.datasets[0].data.push(
           props.guess_data[props.guess_data.length - 1].similarity
         );
-        myChart.value.data.datasets[0].backgroundColor.push(random_rgb());
+        if (myChart.value.data.datasets[0].backgroundColor) {
+          const rgb = random_rgb();
+          myChart.value.data.datasets[0].backgroundColor.push(rgb);
+          console.log(typeof myChart.value.data.datasets[0].backgroundColor);
+        }
         myChart.value.update();
       }
     }
@@ -95,40 +137,9 @@ watch(
 onMounted(() => {
   if (barChart.value !== null) {
     myChart.value = new Chart(barChart.value, {
-      type: "bar",
-      data: {
-        labels: [],
-        datasets: [
-          {
-            label: "Top 10 유사도",
-            data: [],
-            backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)",
-            ],
-            borderColor: [
-              "rgba(255, 99, 132, 1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)",
-            ],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
+      type: "line",
+      data: datas.value,
+      options: options.value,
     });
   }
 });
