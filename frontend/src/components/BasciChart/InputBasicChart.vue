@@ -13,6 +13,7 @@ Chart.register(...registerables);
 const barChart = ref<HTMLCanvasElement | null>(null);
 const init = ref<boolean>(false);
 const flash = ref<boolean>(true);
+const max_value = ref<number | null>(null);
 
 const props = defineProps<{
   guess_data: GuessItemInterface[];
@@ -39,31 +40,25 @@ interface OptionTypes {
   };
 }
 
-const datas = shallowRef<ChartTypes>({
-  labels: [],
-  datasets: [
-    {
-      label: "Top 10 유사도",
-      data: [],
-      backgroundColor: [
-        "rgba(255, 99, 132, 0.2)",
-        "rgba(54, 162, 235, 0.2)",
-        "rgba(255, 206, 86, 0.2)",
-        "rgba(75, 192, 192, 0.2)",
-        "rgba(153, 102, 255, 0.2)",
-        "rgba(255, 159, 64, 0.2)",
-      ],
-      borderColor: [
-        "rgba(255, 99, 132, 1)",
-        "rgba(54, 162, 235, 1)",
-        "rgba(255, 206, 86, 1)",
-        "rgba(75, 192, 192, 1)",
-        "rgba(153, 102, 255, 1)",
-        "rgba(255, 159, 64, 1)",
-      ],
-      borderWidth: 1,
-    },
-  ],
+const datas = shallowRef<any>({
+  data: {
+    datasets: [
+      {
+        label: "현재 유사도",
+        data: [],
+        // this dataset is drawn below
+        order: 2,
+      },
+      {
+        label: "최대 유사도",
+        data: [],
+        type: "line",
+        // this dataset is drawn on top
+        order: 1,
+      },
+    ],
+    labels: [],
+  },
 });
 
 const options = shallowRef<OptionTypes>({
@@ -89,16 +84,23 @@ function show_graph() {
   flash.value = !flash.value;
 }
 
-// Q. 루트에 놓으면, 인식을 못하고 Failed to create chart: can't acquire context from the given item
-// 온마운트에 놓으면 접근을 못함
-// Watch안에 놓으면 exceed오류가 또 나옴
-// 함수로 호출해도 마찬가지로 못찾음
-// 어떻게 해야 할까요?
+function max_value_caculate(total_data: GuessItemInterface[]) {
+  let max_value_candidate = -1;
+  for (let i = 0; i < total_data.length; i++) {
+    if (total_data[i].similarity > max_value_candidate) {
+      max_value_candidate = total_data[i].similarity;
+    }
+  }
+
+  return max_value_candidate;
+}
 
 watch(
   () => props.guess_data.length,
   () => {
     console.log("watch!", props.guess_data[0]);
+    max_value.value = props.guess_data[0].similarity;
+
     if (init.value === false) {
       if (myChart.value !== null) {
         for (let i = 0; i < props.guess_data.length; i++) {
@@ -106,9 +108,12 @@ watch(
           myChart.value.data.datasets[0].data.push(
             props.guess_data[i].similarity
           );
-          if (myChart.value.data.datasets[0].backgroundColor) {
-            const rgb = random_rgb();
-            myChart.value.data.datasets[0].backgroundColor.push(rgb);
+
+          if (max_value.value > props.guess_data[i].similarity) {
+            myChart.value.data.datasets[1].data.push(max_value.value);
+          } else {
+            max_value.value = props.guess_data[i].similarity;
+            myChart.value.data.datasets[1].data.push(max_value.value);
           }
         }
         // debugger;
@@ -123,11 +128,20 @@ watch(
         myChart.value.data.datasets[0].data.push(
           props.guess_data[props.guess_data.length - 1].similarity
         );
-        if (myChart.value.data.datasets[0].backgroundColor) {
-          const rgb = random_rgb();
-          myChart.value.data.datasets[0].backgroundColor.push(rgb);
-          console.log(typeof myChart.value.data.datasets[0].backgroundColor);
+        //
+        max_value.value = max_value_caculate(props.guess_data);
+        console.log(max_value.value);
+        if (
+          max_value.value >
+          props.guess_data[props.guess_data.length - 1].similarity
+        ) {
+          myChart.value.data.datasets[1].data.push(max_value.value);
+        } else {
+          max_value.value =
+            props.guess_data[props.guess_data.length - 1].similarity;
+          myChart.value.data.datasets[1].data.push(max_value.value);
         }
+
         myChart.value.update();
       }
     }
@@ -137,8 +151,8 @@ watch(
 onMounted(() => {
   if (barChart.value !== null) {
     myChart.value = new Chart(barChart.value, {
-      type: "line",
-      data: datas.value,
+      type: "bar",
+      data: datas.value.data,
       options: options.value,
     });
   }
