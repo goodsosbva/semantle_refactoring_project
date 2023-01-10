@@ -123,8 +123,9 @@ function caculate_labels_and_value(
     myChart.value.data.datasets[0].data.push(props.guess_data[i].similarity);
 
     if (max_label === null) {
-      max_label = props.guess_data[i].word;
+      max_label = max_value_caculate(props.guess_data).word;
     }
+    // console.log(max_label, max_value, props.guess_data[i].similarity);
 
     if (max_value > props.guess_data[i].similarity) {
       myChart.value.data.datasets[1].data.push(max_value);
@@ -153,23 +154,6 @@ watch(
           const result = caculate_labels_and_value(max_label, max_value, i);
           max_label = result.max_label;
           max_value = result.max_value;
-          //   myChart.value.data.labels?.push(props.guess_data[i].word);
-          //   myChart.value.data.datasets[0].data.push(
-          //     props.guess_data[i].similarity
-          //   );
-
-          //   if (max_label === null) {
-          //     max_label = props.guess_data[i].word;
-          //   }
-
-          //   if (max_value > props.guess_data[i].similarity) {
-          //     myChart.value.data.datasets[1].data.push(max_value);
-          //   } else {
-          //     max_value = props.guess_data[i].similarity;
-          //     myChart.value.data.datasets[1].data.push(max_value);
-          //     max_label = props.guess_data[i].word;
-          //   }
-          //   max_labels.value.push(max_label);
         }
         // debugger;
         myChart.value.update();
@@ -186,27 +170,6 @@ watch(
         );
         max_label = result.max_label;
         max_value = result.max_value;
-        // myChart.value.data.labels?.push(
-        //   props.guess_data[props.guess_data.length - 1].word
-        // );
-        // myChart.value.data.datasets[0].data.push(
-        //   props.guess_data[props.guess_data.length - 1].similarity
-        // );
-
-        // if (max_label === null) {
-        //   max_label = props.guess_data[props.guess_data.length - 1].word;
-        // }
-
-        // if (
-        //   max_value > props.guess_data[props.guess_data.length - 1].similarity
-        // ) {
-        //   myChart.value.data.datasets[1].data.push(max_value);
-        // } else {
-        //   max_value = props.guess_data[props.guess_data.length - 1].similarity;
-        //   myChart.value.data.datasets[1].data.push(max_value);
-        //   max_label = props.guess_data[props.guess_data.length - 1].word;
-        // }
-        // max_labels.value.push(max_label);
 
         myChart.value.update();
       }
@@ -231,7 +194,6 @@ onMounted(() => {
     });
   }
 
-  console.log(props.is_graph_show);
   if (props.is_graph_show && props.guess_data.length !== 0) {
     let max_value = props.guess_data[0].similarity;
     let max_label = null;
@@ -245,23 +207,6 @@ onMounted(() => {
           const result = caculate_labels_and_value(max_label, max_value, i);
           max_label = result.max_label;
           max_value = result.max_value;
-          // myChart.value.data.labels?.push(props.guess_data[i].word);
-          // myChart.value.data.datasets[0].data.push(
-          //   props.guess_data[i].similarity
-          // );
-
-          // if (max_label === null) {
-          //   max_label = props.guess_data[i].word;
-          // }
-
-          // if (max_value > props.guess_data[i].similarity) {
-          //   myChart.value.data.datasets[1].data.push(max_value);
-          // } else {
-          //   max_value = props.guess_data[i].similarity;
-          //   myChart.value.data.datasets[1].data.push(max_value);
-          //   max_label = props.guess_data[i].word;
-          // }
-          // max_labels.value.push(max_label);
         }
         // debugger;
         myChart.value.update();
