@@ -7,14 +7,11 @@
 <script setup lang="ts">
 import type { GuessItemInterface, NearestItemInterface } from "@/interface";
 import { Chart, registerables } from "chart.js";
-import { max } from "lodash";
 import { computed, onMounted, ref, shallowRef, watch } from "vue";
 Chart.register(...registerables);
 
 const barChart = ref<HTMLCanvasElement | null>(null);
 const init = ref<boolean>(false);
-const flash = ref<boolean>(true);
-const max_value = ref<number | null>(null);
 const max_labels = ref<string[]>([]);
 
 const props = defineProps<{
@@ -80,11 +77,14 @@ const options = shallowRef<OptionTypes>({
   plugins: {
     tooltip: {
       callbacks: {
-        title: function (context: []) {
-          if (context[0].datasetIndex === 0) {
-            return context[0].label;
+        title: function (context: any[]) {
+          if (context[0].length > 0 && context) {
+            if (context[0].datasetIndex === 0) {
+              console.log(context);
+              return context[0].label;
+            }
+            return max_labels.value[context[0].dataIndex];
           }
-          return max_labels.value[context[0].dataIndex];
         },
       },
     },
@@ -176,14 +176,6 @@ watch(
     }
   }
 );
-
-// Q. 되지만
-// watch(
-//   () => props.is_graph_show,
-//   () => {
-//     console.log("watch2!");
-//   }
-// );
 
 onMounted(() => {
   if (barChart.value !== null) {

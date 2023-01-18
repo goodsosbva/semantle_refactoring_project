@@ -212,7 +212,7 @@ let Semantle = (function() {
         let yesterday = await getYesterday()
         $('#yesterday').innerHTML = `어제의 정답은 <b>"${yesterday}"</b>입니다.`;
         $('#yesterday2').innerHTML = `어제의 정답은 <b>"${yesterday}"</b>입니다.
-        <a href="/nearest1k/${yesterdayPuzzleNumber}">여기</a>에서 가장 비슷한 1000개의 단어를 확인할 수 있습니다.`;
+        <a href="/nearest1k/${yesterdayPuzzleNumber}">여기</a>에서 가장 비슷한 1,000개의 단어를 확인할 수 있습니다.`;
         updateLocalTime();
 
         try {
@@ -543,7 +543,7 @@ ${(similarityStory.rest * 100).toFixed(2)}입니다.
         } else {
             response = `<p><b>${guesses.length - 1}번째 추측에서 포기했습니다!</b> `;
         }
-        const commonResponse = `유사도를 확인하기 위해 다른 단어를 입력하거나, <a href="/nearest1k/${puzzleNumber}">여기</a>에서 가장 유사한 1000개의 단어를 볼 수 있습니다.</p> <p><b>${getUpdateTimeHours()}:00</b>에 새로운 문제를 풀 수 있습니다.</p>`
+        const commonResponse = `유사도를 확인하기 위해 다른 단어를 입력하거나, <a href="/nearest1k/${puzzleNumber}">여기</a>에서 가장 유사한 1,000개의 단어를 볼 수 있습니다.</p> <p><b>${getUpdateTimeHours()}:00</b>에 새로운 문제를 풀 수 있습니다.</p>`
         response += commonResponse;
         response += `<input type="button" value="결과 복사하기" id="result" onclick="share()" class="button"><br />`
         const totalGames = stats['wins'] + stats['giveups'] + stats['abandons'];solveStory
