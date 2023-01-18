@@ -41,13 +41,7 @@
               type="checkbox"
               name="dark-mode"
               id="dark-mode"
-              @input="
-                emit(
-                  'update:is_dark',
-                  ($event.target as HTMLInputElement).checked
-                )
-              "
-              :checked="is_dark"
+              @click="store.toggleFlag()"
             />
             <label for="dark-mode"> 다크 모드</label>
           </div>
@@ -125,18 +119,21 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { useFlagStore } from "../stores/lists.js";
+import { storeToRefs } from "pinia";
 
 const props = defineProps<{
-  is_dark: boolean;
   is_display_count: boolean;
   is_display_time: boolean;
   is_display_similarity: boolean;
   is_graph_show: boolean;
 }>();
 
+const store = useFlagStore();
+const { flag, getFalgData } = storeToRefs(store);
+
 const emit = defineEmits<{
   (e: "clicked_close"): void;
-  (e: "update:is_dark", is_dark: boolean): void;
   (e: "update:is_display_count", is_display_count: boolean): void;
   (e: "update:is_display_time", is_display_time: boolean): void;
   (e: "update:is_display_similarity", is_display_similarity: boolean): void;
@@ -144,6 +141,7 @@ const emit = defineEmits<{
 }>();
 
 onMounted(() => {
-  console.log(props.is_graph_show);
+  console.log(getFalgData.value);
+  console.log(store.flag);
 });
 </script>

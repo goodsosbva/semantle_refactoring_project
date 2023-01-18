@@ -5,7 +5,6 @@
       <header>
         <h2>꼬맨틀 - 단어 유사도 추측 게임</h2>
         <Menu
-          v-model:is_dark="is_dark"
           v-model:is_display_count="is_display_count"
           v-model:is_display_time="is_display_time"
           v-model:is_display_similarity="is_display_similarity"
@@ -78,6 +77,8 @@ import Result from "../components/Result.vue";
 import AnswerListTable from "../components/AnswerListTable.vue";
 import { findGuess, todayPuzzleNumber } from "../functions/util";
 import InputBasicChartVue from "@/components/BasciChart/InputBasicChart.vue";
+import { useFlagStore } from "@/stores/lists";
+import { storeToRefs } from "pinia";
 
 const puzzle_number = todayPuzzleNumber();
 
@@ -99,7 +100,13 @@ const is_game_ended = ref<boolean>(false);
 const is_gave_up = ref<boolean>(false);
 const today_guess_count_until_ended = ref<number>(0);
 
-const is_dark = ref<boolean>(false);
+// dark 관련
+// const is_dark = ref<boolean>(false);
+const store = useFlagStore();
+const { flag, getFalgData } = storeToRefs(store);
+
+//
+
 const is_display_count = ref<boolean>(true);
 const is_display_time = ref<boolean>(true);
 const is_display_similarity = ref<boolean>(true);
@@ -302,15 +309,29 @@ async function giveUp() {
   }
 }
 
-watch(is_dark, async (new_value) => {
-  if (new_value) {
-    storage.setItem("darkMode", "true");
-    document.body.classList.add("dark");
-  } else {
-    storage.setItem("darkMode", "false");
-    document.body.classList.remove("dark");
+// dark 관련
+watch(
+  () => store.flag,
+  (new_value) => {
+    console.log(new_value, " value changed");
+    if (new_value) {
+      storage.setItem("darkMode", "true");
+      document.body.classList.add("dark");
+    } else {
+      storage.setItem("darkMode", "false");
+      document.body.classList.remove("dark");
+    }
   }
-});
+);
+// watch(store.flag, async (new_value) => {
+//   if (new_value) {
+//     storage.setItem("darkMode", "true");
+//     document.body.classList.add("dark");
+//   } else {
+//     storage.setItem("darkMode", "false");
+//     document.body.classList.remove("dark");
+//   }
+// });
 watch(is_display_count, async (new_value) => {
   if (new_value) {
     storage.setItem("shareGuesses", "true");
@@ -354,7 +375,10 @@ watch(is_graph_show, async (new_value) => {
 
 async function loadBasicInfo() {
   // 설정값 불러오기
-  is_dark.value = storage.getItem("darkMode") === "true";
+  // dark 관련
+  // is_dark.value = storage.getItem("darkMode") === "true";
+  store.flag = storage.getItem("darkMode") === "true";
+
   // 초기 설정값 true로 바꿔주는 코드
   if (storage.getItem("init") === null) {
     storage.setItem("init", "init_complete");
@@ -409,5 +433,8 @@ async function loadBasicInfo() {
 onMounted(async () => {
   await loadBasicInfo();
   console.log(is_graph_show.value);
+  // dark
+  console.log(store.flag);
+  console.log(flag.value);
 });
 </script>

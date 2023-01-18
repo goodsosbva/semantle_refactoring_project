@@ -26,12 +26,10 @@
   <Dialog
     v-if="is_show_dialog"
     @clicked_close="is_show_dialog = false"
-    :is_dark="is_dark"
     :is_display_count="is_display_count"
     :is_display_time="is_display_time"
     :is_display_similarity="is_display_similarity"
     :is_graph_show="is_graph_show"
-    @update:is_dark="(v) => emit('update:is_dark', v)"
     @update:is_display_count="(v) => emit('update:is_display_count', v)"
     @update:is_display_time="(v) => emit('update:is_display_time', v)"
     @update:is_display_similarity="
@@ -48,7 +46,6 @@ import Dialog from "./Dialog.vue";
 const is_show_dialog = ref<boolean>(false);
 
 const props = defineProps<{
-  is_dark: boolean;
   is_display_count: boolean;
   is_display_time: boolean;
   is_display_similarity: boolean;
@@ -56,7 +53,6 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: "update:is_dark", is_dark: boolean): void;
   (e: "update:is_display_count", is_display_count: boolean): void;
   (e: "update:is_display_time", is_display_time: boolean): void;
   (e: "update:is_display_similarity", is_display_similarity: boolean): void;
