@@ -422,10 +422,6 @@ async function loadBasicInfo() {
 
 onMounted(async () => {
   await loadBasicInfo();
-  console.log(is_graph_show.value);
-  // dark
-  console.log(store.flag);
-  console.log(flag.value);
 });
 </script>
 
