@@ -100,8 +100,12 @@ onMounted(() => {
 }
 
 .result-dashboard {
-  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
-    rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
-    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+  box-shadow: rgba(0, 0, 255, 0.3) 0px 0px 0px 2px inset,
+    rgb(255, 255, 255) 10px -10px 0px -3px, rgba(30, 193, 27, 0.3) 10px -10px,
+    rgb(255, 255, 255) 20px -20px 0px -3px, rgba(255, 216, 19, 0.3) 20px -20px,
+    rgb(255, 255, 255) 30px -30px 0px -3px, rgba(255, 156, 85, 0.3) 30px -30px,
+    rgb(255, 255, 255) 40px -40px 0px -3px, rgba(255, 85, 85, 0.3) 40px -40px;
+
+  padding-left: 20px;
 }
 </style>

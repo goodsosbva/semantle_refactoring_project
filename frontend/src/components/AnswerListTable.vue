@@ -1,5 +1,5 @@
 <template>
-  <table id="guesses">
+  <table id="guesses" class="table">
     <tbody>
       <AnswerListTableRowHeader @update_sort="updateSort" />
       <AnswerListTableRowWord
@@ -79,5 +79,7 @@ const guess_data_to_display = computed(() => {
 .line {
   height: 1px;
 }
+.table {
+  margin-top: 22px;
+}
 </style>
-

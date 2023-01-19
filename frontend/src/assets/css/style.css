@@ -206,7 +206,7 @@ input[type="button"] {
 /* 인풋! - chk */
 #guess-wrapper #guess {
   color: #333;
-  background-color: #fafafa;
+  background-color: #fff;
   width: 100%;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;

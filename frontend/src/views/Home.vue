@@ -2,51 +2,59 @@
   <div>
     <Banner></Banner>
     <div class="container">
-      <header>
-        <h2>꼬맨틀 - 단어 유사도 추측 게임</h2>
-        <Menu
-          v-model:is_display_count="is_display_count"
-          v-model:is_display_time="is_display_time"
-          v-model:is_display_similarity="is_display_similarity"
-          v-model:is_graph_show="is_graph_show"
-        ></Menu>
-      </header>
-      <SimilarityStory :puzzle_number="puzzle_number"></SimilarityStory>
-      <Error :error_text="error_text"></Error>
-      <GuessForm @guess="guessHandler"></GuessForm>
-      <!-- chartjs -->
-      <div v-if="is_graph_show">
-        <InputBasicChartVue
-          :guess_data="guess_data"
-          :is_graph_show="is_graph_show"
-        ></InputBasicChartVue>
-      </div>
-      <Result
-        v-if="is_game_ended"
-        :puzzle_number="puzzle_number"
-        :guess_data="guess_data"
-        :today_guess_count_until_ended="today_guess_count_until_ended"
-        :stats="(stats as StatsInterface)"
-        :is_gave_up="is_gave_up"
-        :is_display_count="is_display_count"
-        :is_display_time="is_display_time"
-        :is_display_similarity="is_display_similarity"
-      ></Result>
-      <AnswerListTable
-        v-if="guess_data.length > 0"
-        :last_word="last_word"
-        :last_word_index="last_word_index"
-        :guess_data="guess_data"
-      ></AnswerListTable>
+      <div class="game-box">
+        <header>
+          <h2 class="title-box">꼬맨틀 - 단어 유사도 추측 게임</h2>
+          <Menu
+            v-model:is_display_count="is_display_count"
+            v-model:is_display_time="is_display_time"
+            v-model:is_display_similarity="is_display_similarity"
+            v-model:is_graph_show="is_graph_show"
+          ></Menu>
+        </header>
+        <SimilarityStory :puzzle_number="puzzle_number"></SimilarityStory>
+        <Error :error_text="error_text"></Error>
+        <GuessForm @guess="guessHandler"></GuessForm>
+        <!-- chartjs -->
+        <div v-if="is_graph_show">
+          <InputBasicChartVue
+            :guess_data="guess_data"
+            :is_graph_show="is_graph_show"
+          ></InputBasicChartVue>
+        </div>
+        <div class="result-box">
+          <Result
+            v-if="is_game_ended"
+            :puzzle_number="puzzle_number"
+            :guess_data="guess_data"
+            :today_guess_count_until_ended="today_guess_count_until_ended"
+            :stats="(stats as StatsInterface)"
+            :is_gave_up="is_gave_up"
+            :is_display_count="is_display_count"
+            :is_display_time="is_display_time"
+            :is_display_similarity="is_display_similarity"
+          ></Result>
+          <AnswerListTable
+            v-if="guess_data.length > 0"
+            :last_word="last_word"
+            :last_word_index="last_word_index"
+            :guess_data="guess_data"
+          ></AnswerListTable>
+        </div>
 
-      <input
+        <!-- <input
         type="button"
         value="포기하기"
         id="give-up-btn"
         class="button"
         @click="giveUp()"
         v-if="!is_game_ended"
-      />
+      /> -->
+        <!-- HTML !-->
+        <button class="button-49" type="button" @click="giveUp()">
+          포기하기
+        </button>
+      </div>
       <Footer
         :puzzle_number="puzzle_number"
         :yesterday_keyword="yesterday_keyword"
@@ -438,3 +446,149 @@ onMounted(async () => {
   console.log(flag.value);
 });
 </script>
+
+<style scoped>
+/* CSS */
+.title-box {
+  color: #333;
+  border-color: red rgba(170, 50, 220, 0.6) green;
+  border-width: 1px;
+  border-style: solid;
+  /* border-top-right-radius: 0; */
+  /* border-bottom-right-radius: 0; */
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+}
+
+.button-55:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 8px -5px;
+  transform: translate3d(0, 2px, 0);
+}
+
+.button-55:focus {
+  box-shadow: rgba(0, 0, 0, 0.3) 2px 8px 4px -6px;
+}
+
+.result-box {
+  color: #333;
+  border-color: red rgba(170, 50, 220, 0.6) green;
+  border-width: 1px;
+  border-style: solid;
+  /* border-top-right-radius: 0; */
+  /* border-bottom-right-radius: 0; */
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  margin: 10px 10px;
+}
+
+/* CSS - givueUp btn */
+.button-49,
+.button-49:after {
+  width: 150px;
+  height: 77px;
+  line-height: 71px;
+  font-size: 20px;
+  font-family: "Bebas Neue", sans-serif;
+  background: linear-gradient(45deg, transparent 5%, rgb(56 145 248 / 20%) 5%);
+  border: 0;
+  color: rgba(0, 0, 0, 0.777);
+  letter-spacing: 3px;
+  box-shadow: 6px 0px 0px rgb(255, 0, 0);
+  outline: transparent;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.button-49:after {
+  --slice-0: inset(50% 50% 50% 50%);
+  --slice-1: inset(80% -6px 0 0);
+  --slice-2: inset(50% -6px 30% 0);
+  --slice-3: inset(10% -6px 85% 0);
+  --slice-4: inset(40% -6px 43% 0);
+  --slice-5: inset(80% -6px 5% 0);
+
+  content: "한번 더 해보아요!";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 3%,
+    rgba(0, 0, 139, 0.267) 3%,
+    rgba(0, 0, 139, 0.267) 5%,
+    #ff013c 5%
+  );
+  text-shadow: -3px -3px 0px #f8f005, 3px 3px 0px rgba(0, 0, 139, 0.267);
+  clip-path: var(--slice-0);
+}
+
+.button-49:hover:after {
+  animation: 1s glitch;
+  animation-timing-function: steps(2, end);
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: var(--slice-1);
+    transform: translate(-20px, -10px);
+  }
+  10% {
+    clip-path: var(--slice-3);
+    transform: translate(10px, 10px);
+  }
+  20% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 10px);
+  }
+  30% {
+    clip-path: var(--slice-3);
+    transform: translate(0px, 5px);
+  }
+  40% {
+    clip-path: var(--slice-2);
+    transform: translate(-5px, 0px);
+  }
+  50% {
+    clip-path: var(--slice-3);
+    transform: translate(5px, 0px);
+  }
+  60% {
+    clip-path: var(--slice-4);
+    transform: translate(5px, 10px);
+  }
+  70% {
+    clip-path: var(--slice-2);
+    transform: translate(-10px, 10px);
+  }
+  80% {
+    clip-path: var(--slice-5);
+    transform: translate(20px, -10px);
+  }
+  90% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 0px);
+  }
+  100% {
+    clip-path: var(--slice-1);
+    transform: translate(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .button-49,
+  .button-49:after {
+    width: 200px;
+    height: 77px;
+    line-height: 71px;
+  }
+}
+</style>

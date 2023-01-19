@@ -17,4 +17,3 @@ const emit = defineEmits<{
   (e: "update_sort", sort_target: SortTargetInterface): void;
 }>();
 </script>
-

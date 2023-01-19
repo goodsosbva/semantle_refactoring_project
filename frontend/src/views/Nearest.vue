@@ -18,7 +18,7 @@
           <th>단어</th>
           <th>유사도</th>
         </tr>
-        <tr v-for="word in nearest_items">
+        <tr v-for="word in nearest_items" v-bind:key="word.word">
           <td>{{ word.rank }}</td>
           <td>{{ word.word }}</td>
           <td>{{ word.similarity }}</td>

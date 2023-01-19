@@ -1,5 +1,9 @@
 <template>
-  <p id="similarity-story" v-if="similarity_story !== null">
+  <p
+    id="similarity-story"
+    class="similarity-story-box"
+    v-if="similarity_story !== null"
+  >
     {{ puzzle_number }}번째 꼬맨틀의 정답 단어를 맞춰보세요.<br />
     정답 단어와 가장 유사한 단어의 유사도는
     <b>{{ (similarity_story.top * 100).toFixed(2) }}</b> 입니다. 10번째로 유사한
@@ -28,3 +32,18 @@ onMounted(async () => {
 });
 </script>
 
+<style scoped>
+.similarity-story-box {
+  color: #333;
+  border-color: red rgba(170, 50, 220, 0.6) green;
+  border-width: 1px;
+  border-style: solid;
+  /* border-top-right-radius: 0; */
+  /* border-bottom-right-radius: 0; */
+  border-bottom-left-radius: 15px 255px;
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  margin: 10px 10px;
+}
+</style>
