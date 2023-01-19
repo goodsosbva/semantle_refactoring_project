@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/multi-word-component-names -->
+
 <template>
   <div v-if="!Number.isNaN(puzzle_number)">
     <div id="warning" v-if="!should_display_answer" @click="display_answer()">

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <p id="question">
     <a
@@ -44,4 +45,3 @@ function toggle_func() {
   margin-bottom: 10px;
 }
 </style>
-

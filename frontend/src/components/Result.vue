@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div id="response" class="result-dashboard">
     <p>
@@ -100,12 +101,15 @@ onMounted(() => {
 }
 
 .result-dashboard {
-  box-shadow: rgba(0, 0, 255, 0.3) 0px 0px 0px 2px inset,
-    rgb(255, 255, 255) 10px -10px 0px -3px, rgba(30, 193, 27, 0.3) 10px -10px,
-    rgb(255, 255, 255) 20px -20px 0px -3px, rgba(255, 216, 19, 0.3) 20px -20px,
-    rgb(255, 255, 255) 30px -30px 0px -3px, rgba(255, 156, 85, 0.3) 30px -30px,
-    rgb(255, 255, 255) 40px -40px 0px -3px, rgba(255, 85, 85, 0.3) 40px -40px;
-
-  padding-left: 20px;
+  border-bottom: 1px solid rgba(0, 0, 255, 0.3) 0px 0px 0px 2px inset;
+  color: #333;
+  border-color: rgb(255, 255, 255) rgba(255, 255, 255, 0.6) rgba(0, 0, 255, 0.3);
+  border-width: 3px;
+  border-style: solid;
+  /* border-bottom-left-radius: 15px 255px; */
+  border-bottom-right-radius: 225px 15px;
+  border-top-left-radius: 255px 15px;
+  border-top-right-radius: 15px 225px;
+  margin: 10px 10px;
 }
 </style>
