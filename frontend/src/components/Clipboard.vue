@@ -9,7 +9,7 @@
         final_sentance1 +
         final_sentance2 +
         final_sentance3 +
-        ' https://semantle-ko.newsjel.ly/'
+        'https://github.com/goodsosbva/semantle_onBoarding'
       "
     />
     <button @click="handleCopy" class="button">기록 복사하기</button>
@@ -173,4 +173,3 @@ onMounted(async () => {
   padding: 9px;
 }
 </style>
-

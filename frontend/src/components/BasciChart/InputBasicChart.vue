@@ -77,7 +77,7 @@ const options = shallowRef<OptionTypes>({
   plugins: {
     tooltip: {
       callbacks: {
-        title: function (context: any[]) {
+        title: function (context: []) {
           if (context[0].length > 0 && context) {
             if (context[0].datasetIndex === 0) {
               console.log(context);

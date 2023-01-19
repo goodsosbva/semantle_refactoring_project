@@ -42,6 +42,7 @@
               name="dark-mode"
               id="dark-mode"
               @click="store.toggleFlag()"
+              :checked="store.flag"
             />
             <label for="dark-mode"> 다크 모드</label>
           </div>
