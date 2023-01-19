@@ -231,12 +231,6 @@ li {
   text-align: justify;
   padding-right: 38px;
 }
-/* .faq {
-  color: darkblue;
-  border: 1px solid rgb(69, 110, 199);
-  text-align: center;
-  box-shadow: 5px 5px rgb(69, 110, 199);
-} */
 
 p {
   color: darkblue;
@@ -262,10 +256,6 @@ span::after {
   bottom: 0px;
   background: rgb(69, 110, 199, 0.6);
 }
-
-/* li:hover {
-  color: blueviolet;
-} */
 
 li:hover span::after {
   width: 100%;

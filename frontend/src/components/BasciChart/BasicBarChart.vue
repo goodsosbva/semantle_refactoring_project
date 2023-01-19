@@ -107,6 +107,4 @@ watch(
     datas.value.datasets[0].data = new_date;
   }
 );
-
-const nearest_top10_push = computed(() => {});
 </script>

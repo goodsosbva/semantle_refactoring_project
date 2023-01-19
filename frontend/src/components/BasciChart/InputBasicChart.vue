@@ -93,15 +93,6 @@ const options = shallowRef<OptionTypes>({
 
 const myChart = shallowRef<Chart | null>(null);
 
-const random_rgb = function (): string {
-  let r = Math.floor(Math.random() * 256);
-  let g = Math.floor(Math.random() * 256);
-  let b = Math.floor(Math.random() * 256);
-
-  let result = `rgba(${r}, ${g}, ${b}, 0.2)`;
-  return result;
-};
-
 function max_value_caculate(total_data: GuessItemInterface[]) {
   let max_value_candidate_obj = total_data[0];
   for (let i = 0; i < total_data.length; i++) {
@@ -125,7 +116,6 @@ function caculate_labels_and_value(
     if (max_label === null) {
       max_label = max_value_caculate(props.guess_data).word;
     }
-    // console.log(max_label, max_value, props.guess_data[i].similarity);
 
     if (max_value > props.guess_data[i].similarity) {
       myChart.value.data.datasets[1].data.push(max_value);
@@ -142,8 +132,6 @@ function caculate_labels_and_value(
 watch(
   () => props.guess_data.length,
   () => {
-    console.log("watch!", props.guess_data);
-    // max_value.value = props.guess_data[0].similarity;
     let max_value = props.guess_data[0].similarity;
     let max_label = null;
 

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <Banner></Banner>
@@ -42,14 +43,6 @@
           ></AnswerListTable>
         </div>
 
-        <!-- <input
-        type="button"
-        value="포기하기"
-        id="give-up-btn"
-        class="button"
-        @click="giveUp()"
-        v-if="!is_game_ended"
-      /> -->
         <!-- HTML !-->
         <button class="button-49" type="button" @click="giveUp()">
           포기하기
@@ -321,7 +314,6 @@ async function giveUp() {
 watch(
   () => store.flag,
   (new_value) => {
-    console.log(new_value, " value changed");
     if (new_value) {
       storage.setItem("darkMode", "true");
       document.body.classList.add("dark");
@@ -331,15 +323,7 @@ watch(
     }
   }
 );
-// watch(store.flag, async (new_value) => {
-//   if (new_value) {
-//     storage.setItem("darkMode", "true");
-//     document.body.classList.add("dark");
-//   } else {
-//     storage.setItem("darkMode", "false");
-//     document.body.classList.remove("dark");
-//   }
-// });
+
 watch(is_display_count, async (new_value) => {
   if (new_value) {
     storage.setItem("shareGuesses", "true");
@@ -378,13 +362,11 @@ watch(is_graph_show, async (new_value) => {
   } else {
     storage.setItem("showGraph", "false");
   }
-  console.log(new_value);
 });
 
 async function loadBasicInfo() {
   // 설정값 불러오기
   // dark 관련
-  // is_dark.value = storage.getItem("darkMode") === "true";
   store.flag = storage.getItem("darkMode") === "true";
 
   // 초기 설정값 true로 바꿔주는 코드

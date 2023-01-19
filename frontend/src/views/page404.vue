@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <img src="../assets/404/2205_w046_n004_125b_p1_125.jpg" class="image404" />
