@@ -35,3 +35,8 @@ Start server
 docker-compose up
 ```
 
+- - -
+### 꼬맨틀 개선 프로젝트 소개
+[개발_꼬맨틀 리팩토링 프로젝트2.pptx](https://github.com/goodsosbva/semantle_onBoarding/files/10462773/_.2.pptx)
+
+
