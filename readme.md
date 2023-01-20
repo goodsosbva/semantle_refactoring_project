@@ -3,6 +3,8 @@
 이 레포지터리는 Johannes Gätjen의 [Semantlich](http://semantlich.johannesgaetjen.de/)
 ([소스코드](https://github.com/gaetjen/semantle-de))를 포크하여,
 한국어로 플레이할 수 있도록 수정한 것입니다.
+
+그리고 **한국어로 작업된 것을 다시 포크하여, 제 입맛에 맞는 개선 프로젝트를 소개합니다!!**
 - - -
 ### Setup (환결 설정 작업 방법)
 
