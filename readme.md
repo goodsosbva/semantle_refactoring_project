@@ -43,7 +43,7 @@ docker-compose up
 * 꼬맨틀 개선프로젝트 코드 해당 저장소에서 보실 수 있습니다. 😎
 * semantle_onBoarding/frontend/ 확인하실 수 있습니다. 😋
 * 구체적으로 프로젝트의 목적과 의의는 아래의 ppt에 정리 해놨습니다. 🤗
-* [개발_꼬맨틀 리팩토링 프로젝트2.pptx](https://github.com/goodsosbva/semantle_onBoarding/files/10462773/_.2.pptx)
+* [개발_꼬맨틀 리팩토링 프로젝트2.pptx](https://github.com/goodsosbva/semantle_refactoring_project/files/10462838/_.2.pptx)
 
 - - -
 ### 꼬맨트 데이터 시각화 + css 스타일링 작업 소개
