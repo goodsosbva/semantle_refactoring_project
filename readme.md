@@ -6,7 +6,7 @@
 
 그리고 **한국어로 작업된 것을 다시 포크하여, 제 입맛에 맞는 개선 프로젝트를 소개합니다!!**
 - - -
-### Setup (환결 설정 작업 방법)
+### Setup (환경 설정 작업 방법 소개)
 
 Download Word2Vec and dictionary data:
 
