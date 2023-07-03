@@ -1,10 +1,10 @@
-# 시맨틀 — 단어 유사도 추측 게임
+# 시맨틀 — Vue.js 개선 프로젝트
 
 이 레포지터리는 Johannes Gätjen의 [Semantlich](http://semantlich.johannesgaetjen.de/)
 ([소스코드](https://github.com/gaetjen/semantle-de))를 포크하여,
-한국어로 플레이할 수 있도록 수정한 것입니다.
+한국어로 플레이할 수 있도록 수정한 것을 다시 Vue.js로 개선한 프로젝트입니다.
 
-그리고 **한국어로 작업된 것을 다시 포크하여, 제 입맛에 맞는 개선 프로젝트를 소개합니다!!**
+ **한국어로 작업된 것을 다시 포크하여, 제 입맛에 맞는 Vue.js 개선 프로젝트를 소개합니다!!**
 - - -
 ### Setup (환경 설정 작업 방법 소개)
 
@@ -45,8 +45,7 @@ docker-compose up
 * 구체적으로 프로젝트의 목적과 의의는 아래의 ppt에 정리 해놨습니다. 🤗
 * [개발_꼬맨틀 리팩토링 프로젝트2.pptx](https://github.com/goodsosbva/semantle_refactoring_project/files/10462838/_.2.pptx)
 
-- - -
-### 꼬맨트 데이터 시각화 + css 스타일링 작업 소개
-* 작업에 관한 설명은 할 예정입니다!!😅 (코드 작업은 완료 됐음.)
+
+
 
 
